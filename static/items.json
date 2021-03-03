@@ -1,14 +1,9 @@
 {
-  "1": {
-    "title": "Test 1"
-  },
-  "2": {
-    "title": "Test 2"
-  },
-  "3": {
-    "title": "Test 3"
-  },
-  "4": {
-    "title": "Test 4"
+  "nextId": 9,
+  "items": {
+    "5": { "manual": { "title": "asdf" }, "mangadex": { "id": "15" } },
+    "6": { "manual": { "title": "asdfąśęćńół" }, "mangadex": { "id": "15" } },
+    "7": { "manual": { "title": "test" }, "mangadex": { "id": "10" } },
+    "8": { "manual": { "title": "test 2" }, "mangadex": { "id": "5652" } }
   }
 }

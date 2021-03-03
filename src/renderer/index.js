@@ -1,18 +1,13 @@
-import { shell } from 'electron';
-import $ from 'cash-dom';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import './index.scss';
-import ItemContainer from './components/ItemContainer';
+import App from './components/App';
+import initStore from './store';
 
-$('body').on('click', 'a', event => {
-  event.preventDefault();
-  shell.openExternal(event.target.href);
-});
-
-window.addEventListener('load', showItems);
-$('#button-update').on('click', showItems);
-
-function showItems() {
-  ReactDOM.render(<ItemContainer />, $('#app')[0]);
-}
+ReactDOM.render(
+  <Provider store={initStore()}>
+    <App />
+  </Provider>,
+  document.getElementById('container')
+);

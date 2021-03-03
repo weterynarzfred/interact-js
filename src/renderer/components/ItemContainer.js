@@ -1,14 +1,11 @@
-import fs from 'fs';
 import React from 'react';
+import { connect } from 'react-redux';
 import Item from './Item';
 
 function ItemContainer(props) {
-  const file = fs.readFileSync('./static/items.json', { encoding: 'utf8' });
-  const data = JSON.parse(file);
-
   const items = [];
-  for (const itemId in data) {
-    const item = data[itemId];
+  for (const itemId in props.items) {
+    const item = props.items[itemId];
     items.push(<Item item={item} key={itemId} />);
   }
 
@@ -20,4 +17,10 @@ function ItemContainer(props) {
   );
 }
 
-export default ItemContainer;
+function mapStateToProps(state) {
+  return {
+    items: state.items,
+  };
+}
+
+export default connect(mapStateToProps)(ItemContainer);
