@@ -1,10 +1,11 @@
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import path from 'path';
 import url from 'url';
 import installExtension, {
   REACT_DEVELOPER_TOOLS,
   REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
+import fetch from 'node-fetch';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -60,4 +61,12 @@ app.on('ready', async () => {
 
 app.on('window-all-closed', () => {
   app.quit();
+});
+
+ipcMain.on('fetch', async (event, arg) => {
+  const response = await fetch(arg, {
+    mode: 'no-cors',
+  });
+  const data = await response.text();
+  event.returnValue = data;
 });

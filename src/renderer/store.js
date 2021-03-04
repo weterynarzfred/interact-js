@@ -2,6 +2,16 @@ import fs from 'fs';
 import { createStore } from 'redux';
 import produce from 'immer';
 
+function saveData(state) {
+  fs.writeFileSync(
+    './static/items.json',
+    JSON.stringify({
+      nextId: state.nextId,
+      items: state.items,
+    })
+  );
+}
+
 function initStore() {
   const file = fs.readFileSync('./static/items.json', { encoding: 'utf8' });
   const data = JSON.parse(file);
@@ -20,13 +30,11 @@ function initStore() {
         case 'ADD_ITEM':
           newState.items[state.nextId] = action.item;
           newState.nextId = state.nextId + 1;
-          fs.writeFileSync(
-            './static/items.json',
-            JSON.stringify({
-              nextId: newState.nextId,
-              items: newState.items,
-            })
-          );
+          saveData(newState);
+          break;
+        case 'DELETE_ITEM':
+          delete newState.items[action.id];
+          saveData(newState);
           break;
         case 'SWITCH':
           newState.switches[action.name] = action.value;
