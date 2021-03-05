@@ -32,13 +32,27 @@ function handleUpdate() {
     };
     break;
   }
+
+  this.dispatch({
+    type: 'UPDATE_ITEM',
+    id: this.item.id,
+    group: 'mangadex',
+    key: 'ready',
+    value: latestChapter,
+  });
+
   console.log(latestChapter);
 }
 
 function Item(props) {
+  const ready =
+    props.item.mangadex.ready === undefined
+      ? 'not found'
+      : props.item.mangadex.ready.number;
   return (
     <div className="item">
       <div className="item-title">{props.item.manual.title}</div>
+      <div className="item-ready">{ready}</div>
       <div className="item-delete" onClick={handleDelete.bind(props)}>
         delete
       </div>

@@ -36,6 +36,11 @@ function initStore() {
           delete newState.items[action.id];
           saveData(newState);
           break;
+        case 'UPDATE_ITEM':
+          console.log(action);
+          newState.items[action.id][action.group][action.key] = action.value;
+          saveData(newState);
+          break;
         case 'SWITCH':
           newState.switches[action.name] = action.value;
           break;
