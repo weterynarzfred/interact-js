@@ -9,12 +9,7 @@ function ItemContainer(props) {
     items.push(<Item item={item} key={itemId} />);
   }
 
-  return (
-    <div className="item-container">
-      <h1>Item list:</h1>
-      {items}
-    </div>
-  );
+  return <div className="item-container">{items}</div>;
 }
 
 function mapStateToProps(state) {

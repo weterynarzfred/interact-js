@@ -51,8 +51,17 @@ function handleIncrement() {
 }
 
 function Item(props) {
+  const classes = ['item'];
+  try {
+    const read = parseFloat(props.item.manual.read);
+    const ready = parseFloat(props.item.mangadex.ready.number);
+    if (!isNaN(read) && !isNaN(ready)) {
+      if (ready > read) classes.push('item-unread');
+    }
+  } catch (e) {}
+
   return (
-    <div className="item">
+    <div className={classes.join(' ')}>
       <div className="item-cover">
         <a
           href={`https://mangadex.org/title/${props.item.mangadex.id}`}
@@ -70,14 +79,14 @@ function Item(props) {
         <ItemProp item={props.item} prop="manual.title" editable={true} />
       </div>
       <div className="item-line">
-        read:
+        <div className="item-line-text">read:</div>
         <ItemProp item={props.item} prop="manual.read" editable={true} />
         <button className="item-button" onClick={handleIncrement.bind(props)}>
-          increment
+          +
         </button>
       </div>
       <div className="item-line">
-        ready:
+        <div className="item-line-text">ready:</div>
         <ItemProp item={props.item} prop="mangadex.ready.number" />
       </div>
       <button
