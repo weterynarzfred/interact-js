@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron';
+import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'path';
 import url from 'url';
 import installExtension, {
@@ -57,6 +57,11 @@ app.on('ready', async () => {
   if (isDevelopment) {
     window.webContents.openDevTools();
   }
+
+  window.webContents.on('new-window', (e, url) => {
+    e.preventDefault();
+    shell.openExternal(url);
+  });
 });
 
 app.on('window-all-closed', () => {

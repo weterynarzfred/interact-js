@@ -1,6 +1,7 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
+import mangadexUpdateItem from '../functions/mangadexUpdateItem';
+import ItemProp from './ItemProp';
 
 function handleDelete() {
   this.dispatch({
@@ -10,55 +11,63 @@ function handleDelete() {
 }
 
 function handleUpdate() {
-  const data = ipcRenderer.sendSync(
-    'fetch',
-    `https://mangadex.org/title/${this.item.mangadex.id}`
-  );
-  const matches = [
-    ...data.matchAll(
-      /<div class="[^"]*?chapter-row[^"]*?"[^>]*?data-chapter="([0-9]*?)"[^>]*?data-lang="([0-9]*)"[^>]*?data-timestamp="([0-9]*)"/gms
-    ),
-  ];
-  let latestChapter;
-  for (let i = 0; i < matches.length; i++) {
-    const element = matches[i];
-    const number = element[1];
-    if (number === undefined) continue;
-    const lang = parseInt(element[2]);
-    if (lang !== 1) continue;
-    latestChapter = {
-      number: parseFloat(number),
-      timestamp: parseInt(element[3]),
-    };
-    break;
-  }
+  const latestChapter = mangadexUpdateItem(this.item.mangadex.id);
 
   this.dispatch({
     type: 'UPDATE_ITEM',
     id: this.item.id,
-    group: 'mangadex',
-    key: 'ready',
+    prop: 'mangadex.ready',
     value: latestChapter,
   });
+}
 
-  console.log(latestChapter);
+function handleIncrement() {
+  this.dispatch({
+    type: 'UPDATE_ITEM',
+    id: this.item.id,
+    prop: 'manual.read',
+    value:
+      typeof this.item.manual.read === 'number' ? this.item.manual.read + 1 : 1,
+  });
 }
 
 function Item(props) {
-  const ready =
-    props.item.mangadex.ready === undefined
-      ? 'not found'
-      : props.item.mangadex.ready.number;
   return (
     <div className="item">
-      <div className="item-title">{props.item.manual.title}</div>
-      <div className="item-ready">{ready}</div>
-      <div className="item-delete" onClick={handleDelete.bind(props)}>
+      <div className="item-cover">
+        <a
+          href={`https://mangadex.org/title/${props.item.mangadex.id}`}
+          target="_blank"
+        >
+          <div className="item-cover-img"></div>
+        </a>
+      </div>
+      <div className="item-title">
+        <ItemProp item={props.item} prop="manual.title" editable={true} />
+      </div>
+      <div className="item-line">
+        read:
+        <ItemProp item={props.item} prop="manual.read" editable={true} />
+        <button className="item-button" onClick={handleIncrement.bind(props)}>
+          increment
+        </button>
+      </div>
+      <div className="item-line">
+        ready:
+        <ItemProp item={props.item} prop="mangadex.ready.number" />
+      </div>
+      <button
+        className="item-button item-delete"
+        onClick={handleDelete.bind(props)}
+      >
         delete
-      </div>
-      <div className="item-update" onClick={handleUpdate.bind(props)}>
+      </button>
+      <button
+        className="item-button item-update"
+        onClick={handleUpdate.bind(props)}
+      >
         update
-      </div>
+      </button>
     </div>
   );
 }

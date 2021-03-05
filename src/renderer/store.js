@@ -1,6 +1,7 @@
 import fs from 'fs';
 import { createStore } from 'redux';
 import produce from 'immer';
+import _ from 'lodash';
 
 function saveData(state) {
   fs.writeFileSync(
@@ -38,8 +39,12 @@ function initStore() {
           break;
         case 'UPDATE_ITEM':
           console.log(action);
-          newState.items[action.id][action.group][action.key] = action.value;
-          saveData(newState);
+          try {
+            _.set(newState.items[action.id], action.prop, action.value);
+            saveData(newState);
+          } catch (e) {
+            console.log(e);
+          }
           break;
         case 'SWITCH':
           newState.switches[action.name] = action.value;
