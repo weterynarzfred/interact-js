@@ -1,6 +1,7 @@
 import { ipcRenderer } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
+import getUnread from '../functions/getUnread';
 import mangadexUpdateItem from '../functions/mangadexUpdateItem';
 import ItemProp from './ItemProp';
 
@@ -52,13 +53,7 @@ function handleIncrement() {
 
 function Item(props) {
   const classes = ['item'];
-  try {
-    const read = parseFloat(props.item.manual.read);
-    const ready = parseFloat(props.item.mangadex.ready.number);
-    if (!isNaN(read) && !isNaN(ready)) {
-      if (ready > read) classes.push('item-unread');
-    }
-  } catch (e) {}
+  if (getUnread(props.item) > 0) classes.push('item-unread');
 
   return (
     <div className={classes.join(' ')}>

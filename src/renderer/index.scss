@@ -59,9 +59,11 @@ button {
     padding: 0.5em;
     width: 15em;
     box-shadow: 0 0 0 1px $bg_2 inset;
+    opacity: 0.75;
 
     &.item-unread {
       box-shadow: 0 0 0 1px $bg_4 inset;
+      opacity: 1;
     }
 
     .item-cover {
@@ -99,8 +101,7 @@ button {
     }
 
     .item-title {
-      font-weight: 900;
-      font-size: 1em;
+      font-size: 0.75em;
 
       .item-prop {
         width: 100%;
@@ -115,13 +116,13 @@ button {
       .item-line-text {
         text-transform: uppercase;
         font-size: 0.5em;
-        font-weight: 900;
         letter-spacing: 0.1em;
       }
 
       .item-prop {
         margin-left: 0.5em;
         width: 5em;
+        font-weight: 900;
       }
     }
 
