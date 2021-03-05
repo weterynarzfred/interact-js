@@ -6,6 +6,7 @@ import installExtension, {
   REDUX_DEVTOOLS,
 } from 'electron-devtools-installer';
 import fetch from 'node-fetch';
+import fs from 'fs';
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -74,4 +75,15 @@ ipcMain.on('fetch', async (event, arg) => {
   });
   const data = await response.text();
   event.returnValue = data;
+});
+
+ipcMain.on('downloadFile', async (event, arg) => {
+  const res = await fetch(arg.url);
+  const fileStream = fs.createWriteStream(arg.dest);
+  await new Promise((resolve, reject) => {
+    res.body.pipe(fileStream);
+    res.body.on('error', reject);
+    fileStream.on('finish', resolve);
+  });
+  event.returnValue = true;
 });
