@@ -6,7 +6,8 @@ import ItemContent from './ItemContent.jsx';
 function Item(props) {
   const [opened, setOpened] = useState(false);
   const classes = ['item'];
-  if (getUnread(props.item) > 0) classes.push('item-unread');
+  const unread = getUnread(props.item);
+  if (unread > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
 
@@ -28,7 +29,19 @@ function Item(props) {
       <button className="item-open" onClick={() => setOpened(!opened)}>
         {opened ? 'x' : 'edit'}
       </button>
+
+      {unread > 0 ? <div className="item-unread-count">
+        {unread}
+        <div className="unread-count-title">unread</div>
+      </div> : null}
+
       {opened ? <ItemContent item={props.item} /> : null}
+      {
+        props.loading.includes(props.item.id) ? <svg className="item-loader" viewBox="0 0 100 100">
+          <circle cx="50" cy="50" r="40" />
+        </svg> : null
+      }
+
     </div>
   );
 }
