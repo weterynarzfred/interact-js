@@ -14,7 +14,7 @@ const initialValues = {
     title: '',
   },
   mangadex: {
-    id: 0,
+    id: '',
   },
 };
 
@@ -36,6 +36,8 @@ function ItemCreator(props) {
       item: values,
     });
 
+    handleCloseItemCreator.call(this);
+
     setValues(initialValues);
   }
 
@@ -43,46 +45,45 @@ function ItemCreator(props) {
 
   return (
     <div className="item-creator">
-      <h2>item creator</h2>
-      <div className="close" onClick={handleCloseItemCreator.bind(props)}>
-        close
+      <div className="item-creator-content">
+        <h2>item creator</h2>
+        <button className="close" onClick={handleCloseItemCreator.bind(props)}>
+          x
+        </button>
+        <div className="item-creator-input">
+          <label>
+            <div className="input-label-text">title</div>
+            <input
+              type="text"
+              value={values.manual.title}
+              onChange={e => {
+                handleChange({
+                  group: 'manual',
+                  name: 'title',
+                  value: e.target.value,
+                });
+              }}
+            />
+          </label>
+        </div>
+        <div className="item-creator-input">
+          <label>
+            <div className="input-label-text">mangadex id</div>
+            <input
+              type="text"
+              value={values.mangadex.id}
+              onChange={e => {
+                handleChange({
+                  group: 'mangadex',
+                  name: 'id',
+                  value: e.target.value,
+                });
+              }}
+            />
+          </label>
+        </div>
+        <button onClick={handleAdd.bind(props, values)}>add</button>
       </div>
-
-      <div className="item-creator-input">
-        <label>
-          <div className="item-creator-input-label">title</div>
-          <input
-            type="text"
-            value={values.manual.title}
-            onChange={e => {
-              handleChange({
-                group: 'manual',
-                name: 'title',
-                value: e.target.value,
-              });
-            }}
-          />
-        </label>
-      </div>
-
-      <div className="item-creator-input">
-        <label>
-          <div className="item-creator-input-label">mangadex id</div>
-          <input
-            type="number"
-            value={values.mangadex.id}
-            onChange={e => {
-              handleChange({
-                group: 'mangadex',
-                name: 'id',
-                value: e.target.value,
-              });
-            }}
-          />
-        </label>
-      </div>
-
-      <button onClick={handleAdd.bind(props, values)}>add</button>
     </div>
   );
 }

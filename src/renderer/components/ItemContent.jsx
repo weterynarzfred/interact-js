@@ -34,17 +34,17 @@ function ItemContent(props) {
       <div className="item-title">
         <ItemProp item={props.item} prop="manual.title" editable={true} />
       </div>
-      <div className="item-line">
-        <div className="item-line-text">read:</div>
+      <label className="item-line">
+        <div className="input-label-text">read:</div>
         <ItemProp item={props.item} prop="manual.read" editable={true} />
         <button className="item-button item-button-increment" onClick={handleIncrement.bind(props)}>
           +
         </button>
-      </div>
-      <div className="item-line">
-        <div className="item-line-text">ready:</div>
+      </label>
+      <label className="item-line">
+        <div className="input-label-text">ready:</div>
         <ItemProp item={props.item} prop="mangadex.ready.number" />
-      </div>
+      </label>
 
       <div className="item-buttons">
         <button

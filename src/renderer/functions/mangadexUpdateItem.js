@@ -19,13 +19,15 @@ async function downloadCover(data, item, dispatch) {
       const dest = `./static/mangadexCovers/${item.mangadex.id}.${extension}`;
 
       const promise = new Promise((resolve, reject) => {
-        dispatch({
-          type: 'UPDATE_ITEM',
-          id: item.id,
-          prop: 'mangadex.cover',
-          value: `${item.mangadex.id}.${extension}`,
+        ipcRenderer.once(`downloadFile-${item.id}`, async (event, data) => {
+          dispatch({
+            type: 'UPDATE_ITEM',
+            id: item.id,
+            prop: 'mangadex.cover',
+            value: `${item.mangadex.id}.${extension}`,
+          });
+          resolve();
         });
-        resolve();
       });
 
       ipcRenderer.send('downloadFile', {

@@ -5,14 +5,18 @@ import ItemContent from './ItemContent.jsx';
 
 function Item(props) {
   const [opened, setOpened] = useState(false);
+
+  const hasImage = props.item.mangadex.cover !== undefined;
+
   const classes = ['item'];
-  const unread = getUnread(props.item);
+  const unread = Math.round(getUnread(props.item) * 100) / 100;
   if (unread > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
 
   return (
     <div className={classes.join(' ')}>
+
       <div className="item-cover">
         <a
           href={`https://mangadex.org/title/${props.item.mangadex.id}`}
@@ -20,18 +24,19 @@ function Item(props) {
         >
           <div
             className="item-cover-img"
-            style={{
+            style={hasImage ? {
               backgroundImage: `url(./mangadexCovers/${props.item.mangadex.cover})`,
-            }}
+            } : null}
           ></div>
         </a>
       </div>
+
       <button className="item-open" onClick={() => setOpened(!opened)}>
         {opened ? 'x' : 'edit'}
       </button>
 
       {unread > 0 ? <div className="item-unread-count">
-        {unread}
+        {unread}/{props.item.mangadex.ready.number}
         <div className="unread-count-title">unread</div>
       </div> : null}
 
