@@ -108,6 +108,10 @@ button {
       }
     }
 
+    &.item-loading {
+      opacity: 0.1;
+    }
+
     .item-content {
       position: absolute;
       right: 0;
@@ -184,7 +188,7 @@ button {
 }
 
 .controls {
-  border-top: 1px solid $bg_5;
+  border-bottom: 1px solid $bg_5;
 
   button {
     padding: 0.5em 1.5em;

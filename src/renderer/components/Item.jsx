@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
 import getUnread from '../functions/getUnread';
 import ItemContent from './ItemContent.jsx';
 
@@ -7,6 +8,7 @@ function Item(props) {
   const classes = ['item'];
   if (getUnread(props.item) > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
+  if (props.loading.includes(props.item.id)) classes.push('item-loading');
 
   return (
     <div className={classes.join(' ')}>
@@ -31,4 +33,4 @@ function Item(props) {
   );
 }
 
-export default Item;
+export default connect(state => ({ loading: state.switches.loading }))(Item);

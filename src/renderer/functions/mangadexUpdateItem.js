@@ -68,6 +68,12 @@ function updateReadyChapters(data, item, dispatch) {
 }
 
 async function mangadexUpdateItem(item, dispatch) {
+  dispatch({
+    type: 'MARK_ITEM_LOADING',
+    id: item.id,
+    loading: true,
+  });
+
   const promise = new Promise((resolve, reject) => {
     ipcRenderer.once(`fetch-${item.id}`, async (event, data) => {
       updateReadyChapters(data, item, dispatch);
@@ -82,6 +88,12 @@ async function mangadexUpdateItem(item, dispatch) {
   });
 
   await promise;
+
+  dispatch({
+    type: 'MARK_ITEM_LOADING',
+    id: item.id,
+    loading: false,
+  });
 }
 
 export default mangadexUpdateItem;

@@ -6,8 +6,8 @@ import ItemCreator from './ItemCreator.jsx';
 function App(props) {
   return (
     <div className="App">
-      <ItemContainer />
       <Controls />
+      <ItemContainer />
       <ItemCreator />
     </div>
   );

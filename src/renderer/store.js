@@ -1,7 +1,7 @@
 import fs from 'fs';
 import { createStore } from 'redux';
 import produce from 'immer';
-import _ from 'lodash';
+import _, { isArray } from 'lodash';
 
 function saveData(state) {
   fs.writeFileSync(
@@ -22,6 +22,7 @@ function initStore() {
     items: data.items,
     switches: {
       itemCreatorOpened: false,
+      loading: [],
     },
   };
 
@@ -47,6 +48,25 @@ function initStore() {
             saveData(newState);
           } catch (e) {
             console.log(e);
+          }
+          break;
+        case 'MARK_ITEM_LOADING':
+          const loadingIds = isArray(action.id) ? action.id : [action.id];
+          if (action.loading) {
+            for (const loadingId of loadingIds) {
+              if (!newState.switches.loading.includes(parseInt(loadingId))) {
+                newState.switches.loading.push(parseInt(loadingId));
+              }
+            }
+          } else {
+            for (const loadingId of loadingIds) {
+              const removeIndex = newState.switches.loading.indexOf(
+                parseInt(loadingId)
+              );
+              if (removeIndex !== -1) {
+                newState.switches.loading.splice(removeIndex, 1);
+              }
+            }
           }
           break;
         case 'SWITCH':

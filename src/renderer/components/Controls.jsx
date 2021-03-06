@@ -11,9 +11,21 @@ function handleOpenItemCreator() {
 }
 
 async function handleUpdate() {
+  if (this.loading.length > 0) {
+    console.log('already loading');
+    return;
+  }
+
+  const loadingIds = [];
+  for (const id in this.items) loadingIds.push(id);
+  this.dispatch({
+    type: 'MARK_ITEM_LOADING',
+    id: loadingIds,
+    loading: true,
+  });
+
   for (const id in this.items) {
-    const item = this.items[id];
-    await mangadexUpdateItem(item, this.dispatch);
+    await mangadexUpdateItem(this.items[id], this.dispatch);
   }
 }
 
@@ -30,4 +42,7 @@ function Controls(props) {
   );
 }
 
-export default connect(state => ({ items: state.items }))(Controls);
+export default connect(state => ({
+  items: state.items,
+  loading: state.switches.loading,
+}))(Controls);
