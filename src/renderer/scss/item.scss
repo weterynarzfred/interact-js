@@ -162,6 +162,7 @@
     opacity: 0;
     transition: 0.3s;
     backdrop-filter: blur(2px);
+    pointer-events: none;
   }
 
   &:hover {
