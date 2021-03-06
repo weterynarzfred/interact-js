@@ -62,6 +62,7 @@ function ItemCreator(props) {
               <input
                 type="text"
                 value={values.manual.title}
+                placeholder="can be loaded from mangadex id"
                 onChange={e => {
                   handleChange({
                     group: 'manual',

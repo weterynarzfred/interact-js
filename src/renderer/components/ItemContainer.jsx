@@ -9,7 +9,7 @@ function ItemContainer(props) {
     const item = props.items[itemId];
     items.push({
       unread: getUnread(item),
-      rating: item.manual.rating,
+      rating: item.manual.rating || 0,
       read: item.manual.read,
       element: <Item item={item} key={itemId} />,
     });
