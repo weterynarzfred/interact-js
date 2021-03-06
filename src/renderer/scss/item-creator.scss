@@ -20,13 +20,18 @@
       position: absolute;
       top: 0.5em;
       right: 0.5em;
+      width: 2em;
+      height: 2em;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .item-creators-inputs {
-      margin-top: 1em;
+    .item-creator-inputs {
+      margin-bottom: 1em;
 
-      input {
-        width: 100%;
+      .item-creator-input {
+        margin-bottom: 0.25em;
       }
     }
   }

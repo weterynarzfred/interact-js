@@ -9,6 +9,7 @@ function Item(props) {
   const hasImage = props.item.mangadex.cover !== undefined;
 
   const classes = ['item'];
+  const ready = props.item.mangadex.ready === undefined ? 0 : props.item.mangadex.ready.number;
   const unread = Math.round(getUnread(props.item) * 100) / 100;
   if (unread > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
@@ -38,10 +39,10 @@ function Item(props) {
       {unread > 0 ? <div className="item-unread-count">
         <div className="unread-count">{unread}</div>
         /
-        <div className="unread-count-ready">{props.item.mangadex.ready.number}</div>
+        <div className="unread-count-ready">{ready}</div>
         <div className="unread-count-title">unread</div>
       </div> : <div className="item-unread-count">
-        {props.item.mangadex.ready.number}
+        {ready}
         <div className="unread-count-title">read</div>
       </div>}
 
