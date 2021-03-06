@@ -13,12 +13,11 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const installExtensions = async () => {
   if (isDevelopment) {
-    installExtension(REACT_DEVELOPER_TOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err));
-    installExtension(REDUX_DEVTOOLS)
-      .then(name => console.log(`Added Extension:  ${name}`))
-      .catch(err => console.log('An error occurred: ', err));
+    [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
+      installExtension(extension)
+        .then(name => console.log(`Added Extension: ${name}`))
+        .catch(err => console.log('An error occurred: ', err));
+    });
   }
 };
 
@@ -52,8 +51,8 @@ async function createWindow() {
 }
 
 app.on('ready', async () => {
-  await installExtensions().catch(console.log);
   const window = await createWindow();
+  installExtensions().catch(console.log);
 
   if (isDevelopment) {
     window.webContents.openDevTools();
@@ -70,11 +69,11 @@ app.on('window-all-closed', () => {
 });
 
 ipcMain.on('fetch', async (event, arg) => {
-  const response = await fetch(arg, {
+  const response = await fetch(arg.url, {
     mode: 'no-cors',
   });
   const data = await response.text();
-  event.returnValue = data;
+  event.reply(`fetch-${arg.requestId}`, data);
 });
 
 ipcMain.on('downloadFile', async (event, arg) => {
@@ -85,5 +84,5 @@ ipcMain.on('downloadFile', async (event, arg) => {
     res.body.on('error', reject);
     fileStream.on('finish', resolve);
   });
-  event.returnValue = true;
+  event.reply(`downloadFile-${arg.requestId}`, true);
 });

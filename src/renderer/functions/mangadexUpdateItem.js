@@ -1,10 +1,45 @@
 import { ipcRenderer } from 'electron';
+import fs from 'fs';
 
-function mangadexUpdateItem(id) {
-  const data = ipcRenderer.sendSync(
-    'fetch',
-    `https://mangadex.org/title/${id}`
-  );
+async function downloadCover(data, item, dispatch) {
+  const coverMatches = [
+    ...data.matchAll(/title="See covers">[^<]*?<img[^>]*?src="([^"]*?)\?/gms),
+  ];
+  let cover;
+  if (coverMatches[0] !== undefined) {
+    cover = coverMatches[0][1];
+  }
+
+  if (cover !== undefined) {
+    if (
+      item.mangadex.cover === undefined ||
+      !fs.existsSync(`./static/mangadexCovers/${item.mangadex.cover}`)
+    ) {
+      const extension = cover.split('.').pop();
+      const dest = `./static/mangadexCovers/${item.mangadex.id}.${extension}`;
+
+      const promise = new Promise((resolve, reject) => {
+        dispatch({
+          type: 'UPDATE_ITEM',
+          id: item.id,
+          prop: 'mangadex.cover',
+          value: `${item.mangadex.id}.${extension}`,
+        });
+        resolve();
+      });
+
+      ipcRenderer.send('downloadFile', {
+        url: cover,
+        dest,
+        requestId: item.id,
+      });
+
+      await promise;
+    }
+  }
+}
+
+function updateReadyChapters(data, item, dispatch) {
   const chapterMatches = [
     ...data.matchAll(
       /<div class="[^"]*?chapter-row[^"]*?"[^>]*?data-chapter="([0-9]*?)"[^>]*?data-lang="([0-9]*)"[^>]*?data-timestamp="([0-9]*)"/gms
@@ -24,18 +59,29 @@ function mangadexUpdateItem(id) {
     break;
   }
 
-  const coverMatches = [
-    ...data.matchAll(/title="See covers">[^<]*?<img[^>]*?src="([^"]*?)\?/gms),
-  ];
-  let cover;
-  if (coverMatches[0] !== undefined) {
-    cover = coverMatches[0][1];
-  }
+  dispatch({
+    type: 'UPDATE_ITEM',
+    id: item.id,
+    prop: 'mangadex.ready',
+    value: latestChapter,
+  });
+}
 
-  return {
-    latestChapter,
-    cover,
-  };
+async function mangadexUpdateItem(item, dispatch) {
+  const promise = new Promise((resolve, reject) => {
+    ipcRenderer.once(`fetch-${item.id}`, async (event, data) => {
+      updateReadyChapters(data, item, dispatch);
+      await downloadCover(data, item, dispatch);
+      resolve();
+    });
+  });
+
+  ipcRenderer.send('fetch', {
+    url: `https://mangadex.org/title/${item.mangadex.id}`,
+    requestId: item.id,
+  });
+
+  await promise;
 }
 
 export default mangadexUpdateItem;

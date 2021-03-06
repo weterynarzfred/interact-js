@@ -1,4 +1,3 @@
-import { ipcRenderer } from 'electron';
 import React from 'react';
 import { connect } from 'react-redux';
 import getUnread from '../functions/getUnread';
@@ -12,33 +11,8 @@ function handleDelete() {
   });
 }
 
-async function handleUpdate() {
-  const { latestChapter, cover } = mangadexUpdateItem(this.item.mangadex.id);
-
-  this.dispatch({
-    type: 'UPDATE_ITEM',
-    id: this.item.id,
-    prop: 'mangadex.ready',
-    value: latestChapter,
-  });
-
-  // if (!this.item.mangadex.coverDownloaded && cover !== undefined) {
-  if (cover !== undefined) {
-    const extension = cover.split('.').pop();
-    const dest = `./static/mangadexCovers/${this.item.mangadex.id}.${extension}`;
-    const result = await ipcRenderer.sendSync('downloadFile', {
-      url: cover,
-      dest,
-    });
-    if (result) {
-      this.dispatch({
-        type: 'UPDATE_ITEM',
-        id: this.item.id,
-        prop: 'mangadex.cover',
-        value: `${this.item.mangadex.id}.${extension}`,
-      });
-    }
-  }
+function handleUpdate() {
+  mangadexUpdateItem(this.item, this.dispatch);
 }
 
 function handleIncrement() {
