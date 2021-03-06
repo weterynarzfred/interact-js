@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import getUnread from '../functions/getUnread';
 import mangadexUpdateItem from '../functions/mangadexUpdateItem';
-import ItemProp from './ItemProp';
+import ItemProp from './ItemProp.jsx';
 
 function handleDelete() {
   this.dispatch({
@@ -25,32 +25,19 @@ function handleIncrement() {
   });
 }
 
-function Item(props) {
+function ItemContent(props) {
   const classes = ['item'];
   if (getUnread(props.item) > 0) classes.push('item-unread');
 
   return (
-    <div className={classes.join(' ')}>
-      <div className="item-cover">
-        <a
-          href={`https://mangadex.org/title/${props.item.mangadex.id}`}
-          target="_blank"
-        >
-          <div
-            className="item-cover-img"
-            style={{
-              backgroundImage: `url(./mangadexCovers/${props.item.mangadex.cover})`,
-            }}
-          ></div>
-        </a>
-      </div>
+    <div className="item-content">
       <div className="item-title">
         <ItemProp item={props.item} prop="manual.title" editable={true} />
       </div>
       <div className="item-line">
         <div className="item-line-text">read:</div>
         <ItemProp item={props.item} prop="manual.read" editable={true} />
-        <button className="item-button" onClick={handleIncrement.bind(props)}>
+        <button className="item-button item-button-increment" onClick={handleIncrement.bind(props)}>
           +
         </button>
       </div>
@@ -58,20 +45,23 @@ function Item(props) {
         <div className="item-line-text">ready:</div>
         <ItemProp item={props.item} prop="mangadex.ready.number" />
       </div>
-      <button
-        className="item-button item-delete"
-        onClick={handleDelete.bind(props)}
-      >
-        delete
-      </button>
-      <button
-        className="item-button item-update"
-        onClick={handleUpdate.bind(props)}
-      >
-        update
-      </button>
+
+      <div className="item-buttons">
+        <button
+          className="item-button item-delete"
+          onClick={handleDelete.bind(props)}
+        >
+          delete
+        </button>
+        <button
+          className="item-button item-update"
+          onClick={handleUpdate.bind(props)}
+        >
+          update
+        </button>
+      </div>
     </div>
   );
 }
 
-export default connect()(Item);
+export default connect()(ItemContent);

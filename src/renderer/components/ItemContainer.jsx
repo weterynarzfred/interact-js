@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import getUnread from '../functions/getUnread';
-import Item from './Item';
+import Item from './Item.jsx';
 
 function ItemContainer(props) {
   const items = [];

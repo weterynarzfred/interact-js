@@ -17,18 +17,20 @@ button {
   position: relative;
   border: none;
   background: none;
+  background-color: $bg;
   font: inherit;
   color: inherit;
-  padding: 0.2rem 1rem;
+  padding: 0.2rem 0.5rem;
   margin: 0.25rem;
   cursor: pointer;
-  box-shadow: 2px 1px $bg_5;
+  box-shadow: 0 0 0 1px $bg_5;
   text-transform: uppercase;
   font-size: 0.75em;
   font-weight: 900;
   letter-spacing: 0.1em;
+  z-index: 1;
 
-  &:after {
+  &:before {
     content: '';
     position: absolute;
     display: block;
@@ -41,7 +43,7 @@ button {
     transition: 0.3s;
   }
 
-  &:hover:after {
+  &:hover:before {
     width: 100%;
   }
 
@@ -56,18 +58,22 @@ button {
   padding-bottom: 3em;
 
   .item {
-    padding: 0.5em;
+    position: relative;
     width: 15em;
-    box-shadow: 0 0 0 1px $bg_2 inset;
-    opacity: 0.75;
+    box-shadow: 0 0 0 1px $bg_2;
+    margin: 0.5em;
+    transition: 0.3s;
 
-    &.item-unread {
-      box-shadow: 0 0 0 1px $bg_4 inset;
-      opacity: 1;
+    .item-open {
+      position: absolute;
+      top: 0.5em;
+      right: 0.5em;
+      opacity: 0;
+      transition: 0.3s;
     }
 
     .item-cover {
-      padding-bottom: 0.5em;
+      overflow: hidden;
 
       .item-cover-img {
         padding-bottom: 150%;
@@ -75,63 +81,112 @@ button {
         background-position: center;
         background-size: cover;
         transition: 0.3s;
+        filter: grayscale(1) blur(2px);
+      }
+    }
 
-        &:hover {
-          opacity: 0.5;
+    &:hover,
+    &.item-opened {
+      .item-cover {
+        .item-cover-img {
+          transform: scale(1.05);
+          filter: none;
+        }
+      }
+
+      .item-open {
+        opacity: 1;
+      }
+    }
+
+    &.item-unread {
+      box-shadow: 0 0 0 2px $bg_4;
+      .item-cover {
+        .item-cover-img {
+          filter: none;
         }
       }
     }
 
-    .item-prop {
-      border: none;
-      background: none;
-      padding: 0;
-      margin: 0;
-      color: inherit;
-      font: inherit;
-      display: inline-block;
-
-      &.item-prop-default {
-        opacity: 0.5;
-      }
-
-      &:focus {
-        outline: none;
-      }
-    }
-
-    .item-title {
-      font-size: 0.75em;
+    .item-content {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 0.5em;
+      background-color: $bg;
 
       .item-prop {
-        width: 100%;
-        text-overflow: ellipsis;
+        border: none;
+        background: none;
+        padding: 0;
+        margin: 0;
+        color: inherit;
+        font: inherit;
+        display: inline-block;
+
+        &.item-prop-default {
+          opacity: 0.5;
+        }
+
+        &:focus {
+          outline: none;
+        }
       }
-    }
 
-    .item-line {
-      display: flex;
-      align-items: center;
+      .item-title {
+        font-size: 1em;
+        padding: 0.25em 0 0.5em 0;
 
-      .item-line-text {
-        text-transform: uppercase;
-        font-size: 0.5em;
-        letter-spacing: 0.1em;
+        .item-prop {
+          width: 100%;
+          text-overflow: ellipsis;
+        }
       }
 
-      .item-prop {
-        margin-left: 0.5em;
-        width: 5em;
-        font-weight: 900;
-      }
-    }
+      .item-line {
+        display: flex;
+        align-items: center;
 
-    .item-button {
-      display: inline-block;
+        .item-line-text {
+          text-transform: uppercase;
+          font-size: 0.5em;
+          letter-spacing: 0.1em;
+          margin-top: 0.2em;
+          min-width: 5em;
+        }
+
+        .item-prop {
+          margin-left: 0.5em;
+          width: 5em;
+          font-weight: 900;
+        }
+
+        .item-button-increment {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 1em;
+          width: 1em;
+          height: 1em;
+          margin-left: auto;
+        }
+      }
+
+      .item-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        padding-top: 0.5em;
+      }
     }
   }
 }
 
 .controls {
   border-top: 1px solid $bg_5;
+
+  button {
+    padding: 0.5em 1.5em;
+  }
 }

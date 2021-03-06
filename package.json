@@ -29,7 +29,8 @@
       "react-redux"
     ],
     "renderer": {
-      "template": "src/renderer/index.html"
+      "template": "src/renderer/index.html",
+      "webpackConfig": "webpack.renderer.js"
     }
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import React from 'react';
-import Controls from './Controls';
-import ItemContainer from './ItemContainer';
-import ItemCreator from './ItemCreator';
+import Controls from './Controls.jsx';
+import ItemContainer from './ItemContainer.jsx';
+import ItemCreator from './ItemCreator.jsx';
 
 function App(props) {
   return (
