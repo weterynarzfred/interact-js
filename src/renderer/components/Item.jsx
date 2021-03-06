@@ -36,9 +36,14 @@ function Item(props) {
       </button>
 
       {unread > 0 ? <div className="item-unread-count">
-        {unread}/{props.item.mangadex.ready.number}
+        <div className="unread-count">{unread}</div>
+        /
+        <div className="unread-count-ready">{props.item.mangadex.ready.number}</div>
         <div className="unread-count-title">unread</div>
-      </div> : null}
+      </div> : <div className="item-unread-count">
+        {props.item.mangadex.ready.number}
+        <div className="unread-count-title">read</div>
+      </div>}
 
       {opened ? <ItemContent item={props.item} /> : null}
       {

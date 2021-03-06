@@ -30,10 +30,7 @@ function initStore() {
     return produce(state, newState => {
       switch (action.type) {
         case 'ADD_ITEM':
-          newState.items[state.nextId] = {
-            ...action.item,
-            id: state.nextId,
-          };
+          newState.items[action.item.id] = action.item;
           newState.nextId = state.nextId + 1;
           saveData(newState);
           break;

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import mangadexUpdateItem from '../functions/mangadexUpdateItem';
 
 function handleCloseItemCreator() {
   this.dispatch({
@@ -12,6 +13,7 @@ function handleCloseItemCreator() {
 const initialValues = {
   manual: {
     title: '',
+    read: '',
   },
   mangadex: {
     id: '',
@@ -30,14 +32,17 @@ function ItemCreator(props) {
     setValues(newValues);
   }
 
-  function handleAdd(values) {
+  async function handleAdd(values) {
+    const newId = props.nextID;
+    const newItem = JSON.parse(JSON.stringify(values));
+    newItem.id = newId;
     this.dispatch({
       type: 'ADD_ITEM',
-      item: values,
+      item: newItem,
     });
+    mangadexUpdateItem(newItem, props.dispatch);
 
     handleCloseItemCreator.call(this);
-
     setValues(initialValues);
   }
 
@@ -50,38 +55,58 @@ function ItemCreator(props) {
         <button className="close" onClick={handleCloseItemCreator.bind(props)}>
           x
         </button>
-        <div className="item-creator-input">
-          <label>
-            <div className="input-label-text">title</div>
-            <input
-              type="text"
-              value={values.manual.title}
-              onChange={e => {
-                handleChange({
-                  group: 'manual',
-                  name: 'title',
-                  value: e.target.value,
-                });
-              }}
-            />
-          </label>
+
+        <div className="item-creator-inputs">
+          <div className="item-creator-input">
+            <label>
+              <div className="input-label-text">title</div>
+              <input
+                type="text"
+                value={values.manual.title}
+                onChange={e => {
+                  handleChange({
+                    group: 'manual',
+                    name: 'title',
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </label>
+          </div>
+          <div className="item-creator-input">
+            <label>
+              <div className="input-label-text">read</div>
+              <input
+                type="text"
+                value={values.manual.read}
+                onChange={e => {
+                  handleChange({
+                    group: 'manual',
+                    name: 'read',
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </label>
+          </div>
+          <div className="item-creator-input">
+            <label>
+              <div className="input-label-text">mangadex id</div>
+              <input
+                type="text"
+                value={values.mangadex.id}
+                onChange={e => {
+                  handleChange({
+                    group: 'mangadex',
+                    name: 'id',
+                    value: e.target.value,
+                  });
+                }}
+              />
+            </label>
+          </div>
         </div>
-        <div className="item-creator-input">
-          <label>
-            <div className="input-label-text">mangadex id</div>
-            <input
-              type="text"
-              value={values.mangadex.id}
-              onChange={e => {
-                handleChange({
-                  group: 'mangadex',
-                  name: 'id',
-                  value: e.target.value,
-                });
-              }}
-            />
-          </label>
-        </div>
+
         <button onClick={handleAdd.bind(props, values)}>add</button>
       </div>
     </div>
@@ -91,6 +116,8 @@ function ItemCreator(props) {
 function mapStateToProps(state) {
   return {
     itemCreatorOpened: state.switches.itemCreatorOpened,
+    items: state.items,
+    nextId: state.nextId,
   };
 }
 
