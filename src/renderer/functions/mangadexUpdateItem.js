@@ -42,7 +42,7 @@ async function downloadCover(data, item, dispatch) {
 function updateReadyChapters(data, item, dispatch) {
   const chapterMatches = [
     ...data.matchAll(
-      /<div class="[^"]*?chapter-row[^"]*?"[^>]*?data-chapter="([0-9]*?)"[^>]*?data-lang="([0-9]*)"[^>]*?data-timestamp="([0-9]*)"/gms
+      /<div class="[^"]*?chapter-row[^"]*?"[^>]*?data-chapter="([0-9.]*?)"[^>]*?data-lang="([0-9]*)"[^>]*?data-timestamp="([0-9]*)"/gms
     ),
   ];
   let latestChapter;
