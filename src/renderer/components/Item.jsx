@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 import getUnread from '../functions/getUnread';
 import ItemContent from './ItemContent.jsx';
+import ItemRating from './ItemRating.jsx';
 
 function Item(props) {
   const [opened, setOpened] = useState(false);
@@ -36,6 +37,8 @@ function Item(props) {
       <button className="item-open" onClick={() => setOpened(!opened)}>
         {opened ? 'x' : 'edit'}
       </button>
+
+      <ItemRating item={props.item} />
 
       {unread > 0 ? <div className="item-unread-count">
         <div className="unread-count">{unread}</div>
