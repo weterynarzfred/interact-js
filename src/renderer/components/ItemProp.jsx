@@ -28,6 +28,7 @@ function ItemProp(props) {
       className={classes.join(' ')}
       value={value}
       onChange={handleChange.bind(props)}
+      placeholder={props.placeholder}
     />
   );
 }

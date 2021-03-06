@@ -4,7 +4,7 @@ function getUnread(item) {
     const read = parseFloat(item.manual.read);
     const ready = parseFloat(item.mangadex.ready.number);
     if (!isNaN(read) && !isNaN(ready)) {
-      unread = ready - read;
+      unread = Math.max(ready - read, 0);
     }
   } catch (e) {}
   return unread;

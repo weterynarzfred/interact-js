@@ -5,14 +5,23 @@ import getUnread from '../functions/getUnread';
 import ItemContent from './ItemContent.jsx';
 import ItemRating from './ItemRating.jsx';
 
+function getTitle(item) {
+  let title = _.get(item, 'manual.title');
+  if (!title) title = _.get(item, 'mangadex.title');
+  return title;
+}
+
 function Item(props) {
   const [opened, setOpened] = useState(false);
 
   const hasImage = _.get(props.item, 'mangadex.cover') !== undefined;
 
   const classes = ['item'];
+  const read = _.get(props.item, 'manual.read');
   const ready = _.get(props.item, 'mangadex.ready.number');
+  const title = getTitle(props.item);
   const unread = Math.round(getUnread(props.item) * 100) / 100;
+  if (read === undefined || read === '') classes.push('item-warning');
   if (unread > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
@@ -39,6 +48,8 @@ function Item(props) {
       </button>
 
       <ItemRating item={props.item} />
+
+      <div className="item-title">{title}</div>
 
       {unread > 0 ? <div className="item-unread-count">
         <div className="unread-count">{unread}</div>

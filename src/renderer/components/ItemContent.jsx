@@ -31,8 +31,8 @@ function ItemContent(props) {
 
   return (
     <div className="item-content">
-      <div className="item-title">
-        <ItemProp item={props.item} prop="manual.title" editable={true} />
+      <div className="item-custom-title">
+        <ItemProp item={props.item} prop="manual.title" editable={true} placeholder="custom title" />
       </div>
       <label className="item-line">
         <div className="input-label-text">read:</div>

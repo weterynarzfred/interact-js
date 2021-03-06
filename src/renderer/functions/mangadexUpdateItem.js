@@ -1,5 +1,6 @@
 import { ipcRenderer } from 'electron';
 import fs from 'fs';
+import _ from 'lodash';
 
 async function downloadCover(data, item, dispatch) {
   const coverMatches = [
@@ -69,6 +70,26 @@ function updateReadyChapters(data, item, dispatch) {
   });
 }
 
+function updateMeta(data, item, dispatch) {
+  if (_.get(item, 'mangadex.title') === undefined) {
+    const titleMatches = [
+      ...data.matchAll(
+        /class="card-header[^>]*?>.*?mx-1">([^<]*?)<\/span>.*?<\/h6>/gms
+      ),
+    ];
+
+    if (titleMatches[0] !== undefined) {
+      const title = titleMatches[0][1];
+      dispatch({
+        type: 'UPDATE_ITEM',
+        id: item.id,
+        prop: 'mangadex.title',
+        value: title,
+      });
+    }
+  }
+}
+
 async function mangadexUpdateItem(item, dispatch) {
   dispatch({
     type: 'MARK_ITEM_LOADING',
@@ -80,6 +101,7 @@ async function mangadexUpdateItem(item, dispatch) {
     ipcRenderer.once(`fetch-${item.id}`, async (event, data) => {
       updateReadyChapters(data, item, dispatch);
       await downloadCover(data, item, dispatch);
+      updateMeta(data, item, dispatch);
       resolve();
     });
   });
