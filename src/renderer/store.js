@@ -28,6 +28,7 @@ function initStore() {
 
   function rootReducer(state = initialState, action = '') {
     return produce(state, newState => {
+      console.log(action);
       switch (action.type) {
         case 'ADD_ITEM':
           newState.items[action.item.id] = action.item;
@@ -39,7 +40,6 @@ function initStore() {
           saveData(newState);
           break;
         case 'UPDATE_ITEM':
-          console.log(action);
           try {
             _.set(newState.items[action.id], action.prop, action.value);
             saveData(newState);

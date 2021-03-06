@@ -33,9 +33,8 @@ function ItemCreator(props) {
   }
 
   async function handleAdd(values) {
-    const newId = props.nextID;
     const newItem = JSON.parse(JSON.stringify(values));
-    newItem.id = newId;
+    newItem.id = props.nextId;
     this.dispatch({
       type: 'ADD_ITEM',
       item: newItem,

@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import getUnread from '../functions/getUnread';
 import ItemContent from './ItemContent.jsx';
 
 function Item(props) {
   const [opened, setOpened] = useState(false);
 
-  const hasImage = props.item.mangadex.cover !== undefined;
+  const hasImage = _.get(props.item, 'mangadex.cover') !== undefined;
 
   const classes = ['item'];
-  const ready = props.item.mangadex.ready === undefined ? 0 : props.item.mangadex.ready.number;
+  const ready = _.get(props.item, 'mangadex.ready.number');
   const unread = Math.round(getUnread(props.item) * 100) / 100;
   if (unread > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
@@ -20,13 +21,13 @@ function Item(props) {
 
       <div className="item-cover">
         <a
-          href={`https://mangadex.org/title/${props.item.mangadex.id}`}
+          href={`https://mangadex.org/title/${_.get(props.item, 'mangadex.id')}`}
           target="_blank"
         >
           <div
             className="item-cover-img"
             style={hasImage ? {
-              backgroundImage: `url(./mangadexCovers/${props.item.mangadex.cover})`,
+              backgroundImage: `url(./mangadexCovers/${_.get(props.item, 'mangadex.cover')})`,
             } : null}
           ></div>
         </a>
