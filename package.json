@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "build": "electron-webpack",
-    "start": "electron .",
     "pack": "npm run build & electron-builder --dir",
     "dist": "npm run build & electron-builder"
   },

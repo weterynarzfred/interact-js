@@ -31,6 +31,7 @@ function ItemContent(props) {
 
   return (
     <div className="item-content">
+      <small style={{ fontSize: '0.6em' }}>{props.item.mangadex.id}</small>
       <div className="item-custom-title">
         <ItemProp item={props.item} prop="manual.title" editable={true} placeholder="custom title" />
       </div>

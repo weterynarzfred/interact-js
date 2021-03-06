@@ -21,7 +21,7 @@ function Item(props) {
   const ready = _.get(props.item, 'mangadex.ready.number');
   const title = getTitle(props.item);
   const unread = Math.round(getUnread(props.item) * 100) / 100;
-  if (read === undefined || read === '') classes.push('item-warning');
+  if (read === undefined || read === '' || ready === undefined || ready === '') classes.push('item-warning');
   if (unread > 0) classes.push('item-unread');
   if (opened) classes.push('item-opened');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
@@ -37,7 +37,7 @@ function Item(props) {
           <div
             className="item-cover-img"
             style={hasImage ? {
-              backgroundImage: `url(./mangadexCovers/${_.get(props.item, 'mangadex.cover')})`,
+              backgroundImage: `url(./${process.env.NODE_ENV === 'production' ? '../static/' : ''}mangadexCovers/${_.get(props.item, 'mangadex.cover')})`,
             } : null}
           ></div>
         </a>
@@ -57,7 +57,7 @@ function Item(props) {
         <div className="unread-count-ready">{ready}</div>
         <div className="unread-count-title">unread</div>
       </div> : <div className="item-unread-count">
-        {ready}
+        {read}
         <div className="unread-count-title">read</div>
       </div>}
 
@@ -67,6 +67,8 @@ function Item(props) {
           <circle cx="50" cy="50" r="40" />
         </svg> : null
       }
+
+      <div className="item-overlay"></div>
 
     </div>
   );

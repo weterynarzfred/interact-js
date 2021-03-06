@@ -5,7 +5,7 @@ import _, { isArray } from 'lodash';
 
 function saveData(state) {
   fs.writeFileSync(
-    './static/items.json',
+    `${__static}/items.json`,
     JSON.stringify({
       nextId: state.nextId,
       items: state.items,
@@ -14,7 +14,9 @@ function saveData(state) {
 }
 
 function initStore() {
-  const file = fs.readFileSync('./static/items.json', { encoding: 'utf8' });
+  const file = fs.readFileSync(`${__static}/items.json`, {
+    encoding: 'utf8',
+  });
   const data = JSON.parse(file);
 
   const initialState = {

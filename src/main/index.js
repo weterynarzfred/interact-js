@@ -1,10 +1,6 @@
 import { app, BrowserWindow, ipcMain, shell } from 'electron';
 import path from 'path';
 import url from 'url';
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-  REDUX_DEVTOOLS,
-} from 'electron-devtools-installer';
 import fetch from 'node-fetch';
 import fs from 'fs';
 
@@ -12,6 +8,11 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
 const installExtensions = async () => {
+  const {
+    default: installExtension,
+    REACT_DEVELOPER_TOOLS,
+    REDUX_DEVTOOLS,
+  } = require('electron-devtools-installer');
   if (isDevelopment) {
     [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
       installExtension(extension)

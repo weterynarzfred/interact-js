@@ -14,10 +14,10 @@ async function downloadCover(data, item, dispatch) {
   if (cover !== undefined) {
     if (
       item.mangadex.cover === undefined ||
-      !fs.existsSync(`./static/mangadexCovers/${item.mangadex.cover}`)
+      !fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`)
     ) {
       const extension = cover.split('.').pop();
-      const dest = `./static/mangadexCovers/${item.mangadex.id}.${extension}`;
+      const dest = `${__static}/mangadexCovers/${item.mangadex.id}.${extension}`;
 
       const promise = new Promise((resolve, reject) => {
         ipcRenderer.once(`downloadFile-${item.id}`, async (event, data) => {
