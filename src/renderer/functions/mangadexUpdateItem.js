@@ -3,19 +3,25 @@ import fs from 'fs';
 import _ from 'lodash';
 
 async function downloadCover(data, item, dispatch) {
-  const coverMatches = [
-    ...data.matchAll(/title="See covers">[^<]*?<img[^>]*?src="([^"]*?)\?/gms),
-  ];
-  let cover;
-  if (coverMatches[0] !== undefined) {
-    cover = coverMatches[0][1];
-  }
+  if (
+    item.mangadex.cover === undefined ||
+    !fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`)
+  ) {
+    console.time('match');
+    const coverMatches = [
+      ...data.matchAll(/title="See covers">[^<]*?<img[^>]*?src="([^"]*?)\?/gms),
+    ];
+    let cover;
+    if (coverMatches[0] !== undefined) {
+      cover = coverMatches[0][1];
+    }
+    console.timeEnd('match');
 
-  if (cover !== undefined) {
-    if (
-      item.mangadex.cover === undefined ||
-      !fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`)
-    ) {
+    console.time('exists');
+    fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`);
+    console.timeEnd('exists');
+
+    if (cover !== undefined) {
       const extension = cover.split('.').pop();
       const dest = `${__static}/mangadexCovers/${item.mangadex.id}.${extension}`;
 
@@ -38,6 +44,8 @@ async function downloadCover(data, item, dispatch) {
       });
 
       await promise;
+    } else {
+      console.log(`cover not found for`, item);
     }
   }
 }
@@ -62,12 +70,16 @@ function updateReadyChapters(data, item, dispatch) {
     break;
   }
 
-  dispatch({
-    type: 'UPDATE_ITEM',
-    id: item.id,
-    prop: 'mangadex.ready',
-    value: latestChapter,
-  });
+  if (latestChapter !== undefined && latestChapter.number !== undefined) {
+    dispatch({
+      type: 'UPDATE_ITEM',
+      id: item.id,
+      prop: 'mangadex.ready',
+      value: latestChapter,
+    });
+  } else {
+    console.log(`latest chapter not found for`, item);
+  }
 }
 
 function updateMeta(data, item, dispatch) {
@@ -86,6 +98,8 @@ function updateMeta(data, item, dispatch) {
         prop: 'mangadex.title',
         value: title,
       });
+    } else {
+      console.log(`title not found for`, item);
     }
   }
 }

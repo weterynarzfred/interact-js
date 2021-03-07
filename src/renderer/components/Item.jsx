@@ -4,12 +4,7 @@ import _ from 'lodash';
 import getUnread from '../functions/getUnread';
 import ItemContent from './ItemContent.jsx';
 import ItemRating from './ItemRating.jsx';
-
-function getTitle(item) {
-  let title = _.get(item, 'manual.title');
-  if (!title) title = _.get(item, 'mangadex.title');
-  return title;
-}
+import getTitle from '../functions/getTtitle';
 
 function Item(props) {
   const [opened, setOpened] = useState(false);
