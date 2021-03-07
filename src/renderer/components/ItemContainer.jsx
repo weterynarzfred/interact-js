@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import getUnread from '../functions/getUnread';
+import getProp from '../functions/getProp';
 import Item from './Item.jsx';
 
 function ItemContainer(props) {
@@ -8,9 +8,9 @@ function ItemContainer(props) {
   for (const itemId in props.items) {
     const item = props.items[itemId];
     items.push({
-      unread: getUnread(item),
+      unread: getProp(item, 'unread'),
       rating: item.manual.rating || 0,
-      read: item.manual.read,
+      read: getProp(item, 'read'),
       element: <Item item={item} key={itemId} />,
     });
   }

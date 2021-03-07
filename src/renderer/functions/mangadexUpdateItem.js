@@ -7,7 +7,6 @@ async function downloadCover(data, item, dispatch) {
     item.mangadex.cover === undefined ||
     !fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`)
   ) {
-    console.time('match');
     const coverMatches = [
       ...data.matchAll(/title="See covers">[^<]*?<img[^>]*?src="([^"]*?)\?/gms),
     ];
@@ -15,11 +14,6 @@ async function downloadCover(data, item, dispatch) {
     if (coverMatches[0] !== undefined) {
       cover = coverMatches[0][1];
     }
-    console.timeEnd('match');
-
-    console.time('exists');
-    fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`);
-    console.timeEnd('exists');
 
     if (cover !== undefined) {
       const extension = cover.split('.').pop();
@@ -75,7 +69,13 @@ function updateReadyChapters(data, item, dispatch) {
       type: 'UPDATE_ITEM',
       id: item.id,
       prop: 'mangadex.ready',
-      value: latestChapter,
+      value: latestChapter.number,
+    });
+    dispatch({
+      type: 'UPDATE_ITEM',
+      id: item.id,
+      prop: 'mangadex.lastChapterTimestamp',
+      value: latestChapter.timestamp,
     });
   } else {
     console.log(`latest chapter not found for`, item);

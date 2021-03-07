@@ -2,11 +2,10 @@ import React from 'react';
 import { connect } from 'react-redux';
 import mangadexUpdateItem from '../functions/mangadexUpdateItem';
 
-function handleOpenItemCreator() {
+function handleOpenItemEditor() {
   this.dispatch({
-    type: 'SWITCH',
-    name: 'itemCreatorOpened',
-    value: true,
+    type: 'OPEN_EDITOR',
+    open: true,
   });
 }
 
@@ -32,7 +31,7 @@ async function handleUpdate() {
 function Controls(props) {
   return (
     <div className="controls">
-      <button id="button-add-new" onClick={handleOpenItemCreator.bind(props)}>
+      <button id="button-add-new" onClick={handleOpenItemEditor.bind(props)}>
         add new
       </button>
       <button id="button-update-all" onClick={handleUpdate.bind(props)}>

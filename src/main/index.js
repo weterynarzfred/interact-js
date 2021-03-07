@@ -24,8 +24,8 @@ const installExtensions = async () => {
 
 async function createWindow() {
   const window = new BrowserWindow({
-    width: 1935,
-    height: 1080,
+    width: 1936,
+    height: 1088,
     y: 0,
     x: 1910,
     webPreferences: {

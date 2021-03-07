@@ -1,24 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import getUnread from '../functions/getUnread';
-import ItemContent from './ItemContent.jsx';
 import ItemRating from './ItemRating.jsx';
-import getTitle from '../functions/getTtitle';
+import getProp from '../functions/getProp';
+
+function handleOpenItemEditor() {
+  this.dispatch({
+    type: 'OPEN_EDITOR',
+    open: true,
+    itemId: this.item.id,
+  });
+}
 
 function Item(props) {
-  const [opened, setOpened] = useState(false);
-
   const hasImage = _.get(props.item, 'mangadex.cover') !== undefined;
 
   const classes = ['item'];
-  const read = _.get(props.item, 'manual.read');
-  const ready = _.get(props.item, 'mangadex.ready.number');
-  const title = getTitle(props.item);
-  const unread = Math.round(getUnread(props.item) * 100) / 100;
-  if (read === undefined || read === '' || ready === undefined || ready === '') classes.push('item-warning');
+  const read = getProp(props.item, 'read');
+  const ready = getProp(props.item, 'ready');
+  const title = getProp(props.item, 'title');
+  const unread = Math.round(getProp(props.item, 'unread') * 100) / 100;
   if (unread > 0) classes.push('item-unread');
-  if (opened) classes.push('item-opened');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
 
   return (
@@ -38,8 +40,8 @@ function Item(props) {
         </a>
       </div>
 
-      <button className="item-open" onClick={() => setOpened(!opened)}>
-        {opened ? 'x' : 'edit'}
+      <button className="item-open" onClick={handleOpenItemEditor.bind(props)}>
+        edit
       </button>
 
       <ItemRating item={props.item} />
@@ -56,7 +58,6 @@ function Item(props) {
         <div className="unread-count-title">read</div>
       </div>}
 
-      {opened ? <ItemContent item={props.item} /> : null}
       {
         props.loading.includes(props.item.id) ? <svg className="item-loader" viewBox="0 0 100 100">
           <circle cx="50" cy="50" r="40" />

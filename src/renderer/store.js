@@ -23,7 +23,8 @@ function initStore() {
     nextId: data.nextId,
     items: data.items,
     switches: {
-      itemCreatorOpened: false,
+      itemEditorOpened: false,
+      itemEditorItemId: -1,
       loading: [],
     },
   };
@@ -44,12 +45,17 @@ function initStore() {
           break;
         case 'UPDATE_ITEM':
           console.log(action);
-          try {
+          if (action.item === undefined) {
             _.set(newState.items[action.id], action.prop, action.value);
-            saveData(newState);
-          } catch (e) {
-            console.log(e);
+          } else {
+            newState.items[action.item.id] = action.item;
           }
+          saveData(newState);
+          break;
+        case 'OPEN_EDITOR':
+          newState.switches.itemEditorOpened = action.open;
+          newState.switches.itemEditorItemId =
+            action.itemId === undefined ? -1 : action.itemId;
           break;
         case 'MARK_ITEM_LOADING':
           const loadingIds = isArray(action.id) ? action.id : [action.id];
