@@ -98,24 +98,24 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: -3em;
-    width: 6em;
-    height: 6em;
-    background-color: #fff7;
+    margin: -1.5em;
+    width: 3em;
+    height: 3em;
+    background-color: #3339;
+    backdrop-filter: blur(2px);
+    border: 2px solid #fff;
     border-radius: 50%;
-    box-shadow: 0.1em 0.1em 0.1em #0005, 0.1em 0.1em 0.1em #fff9 inset;
     padding: 0.5em;
     z-index: 1;
+    animation: spin 2.5s infinite linear;
 
     circle {
       fill: none;
-      stroke: #0007;
+      stroke: #fff;
       stroke-linecap: round;
       stroke-linejoin: round;
       transform-origin: 50% 50%;
-      animation: spin 1s infinite;
-      filter: drop-shadow(-1.6px -1.6px 1.6px #0005)
-        drop-shadow(1.6px 1.6px 1.6px #fff9);
+      animation: spinSmall 1s infinite;
     }
   }
 

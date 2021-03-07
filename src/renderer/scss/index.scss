@@ -10,33 +10,25 @@ $warning: #f55;
 
 @keyframes spin {
   0% {
-    stroke-width: 15;
-    stroke-dasharray: 0 41.8879 0 0;
-    stroke-dashoffset: 41.8879;
-  }
-  25% {
-    stroke-width: 5;
-    stroke-dasharray: 0 20 10 11.8879;
+    transform: rotate(0deg);
   }
   100% {
-    stroke-width: 15;
-    stroke-dasharray: 0 0 0 41.8879;
-    stroke-dashoffset: 0;
+    transform: rotate(360deg);
   }
 }
 
 @keyframes spinSmall {
   0% {
-    stroke-width: 25;
+    stroke-width: 20;
     stroke-dasharray: 10 73.7758;
     stroke-dashoffset: 83.7758;
   }
   25% {
-    stroke-width: 10;
+    stroke-width: 5;
     stroke-dasharray: 60 23.7758;
   }
   100% {
-    stroke-width: 25;
+    stroke-width: 20;
     stroke-dasharray: 10 73.7758;
     stroke-dashoffset: 2;
   }
@@ -99,6 +91,7 @@ button {
     height: 1.5em;
     margin: -0.2em 0 -0.2em 0;
     transition: 0.3s;
+    animation: spin 2.5s infinite linear;
 
     circle {
       stroke: #fff;
