@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import mangadexUpdateItem from '../functions/mangadexUpdateItem';
+import updateItem from '../functions/updateItem';
 
 function handleOpenItemEditor() {
   this.dispatch({
@@ -24,7 +24,7 @@ async function handleUpdate() {
   });
 
   for (const id in this.items) {
-    await mangadexUpdateItem(this.items[id], this.dispatch);
+    await updateItem(this.items[id], this.dispatch);
   }
 }
 

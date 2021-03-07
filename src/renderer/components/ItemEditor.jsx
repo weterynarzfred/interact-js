@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import mangadexUpdateItem from '../functions/mangadexUpdateItem';
 import ItemEditorInput from './ItemEditorInput';
 import ButtonLoader from './ButtonLoader';
+import updateItem from '../functions/updateItem';
 
 function handleCloseItemEditor() {
   this.dispatch({
@@ -22,7 +22,7 @@ function ItemEditor(props) {
   }
 
   async function handleUpdate() {
-    await mangadexUpdateItem(this.items[this.itemId], this.dispatch);
+    await updateItem(this.items[this.itemId], this.dispatch);
     setValues({});
   }
 
@@ -42,7 +42,7 @@ function ItemEditor(props) {
       type: 'ADD_ITEM',
       item: newItem,
     });
-    mangadexUpdateItem(newItem, props.dispatch);
+    updateItem(newItem, props.dispatch);
 
     handleCloseItemEditor.call(this);
     setValues({});
@@ -93,6 +93,12 @@ function ItemEditor(props) {
             prop="mangadex.id"
             handleChange={handleChange.bind(props)}
           />
+          <ItemEditorInput
+            values={values}
+            label="mangatown id"
+            prop="mangatown.id"
+            handleChange={handleChange.bind(props)}
+          />
         </div>
 
         {props.itemId >= 0 ? <>
@@ -102,6 +108,8 @@ function ItemEditor(props) {
             <ButtonLoader />
           </button>
         </> : null}
+
+        <hr />
 
         <div className="item-editor-inputs">
           <h3>manual</h3>
@@ -148,6 +156,21 @@ function ItemEditor(props) {
             values={values}
             label="ready"
             prop="mangadex.ready"
+            handleChange={handleChange.bind(props)}
+            editable={false}
+          />
+
+          <h3>mangatown</h3>
+          <ItemEditorInput
+            values={values}
+            label="id"
+            prop="mangatown.id"
+            handleChange={handleChange.bind(props)}
+          />
+          <ItemEditorInput
+            values={values}
+            label="ready"
+            prop="mangatown.ready"
             handleChange={handleChange.bind(props)}
             editable={false}
           />

@@ -69,16 +69,21 @@ function updateReadyChapters(data, item, dispatch) {
   }
 
   if (latestChapter !== undefined && latestChapter.number !== undefined) {
-    const newItem = JSON.parse(JSON.stringify(item));
-    newItem.mangadex.ready = latestChapter.number;
-    newItem.mangadex.lastChapterTimestamp = latestChapter.timestamp;
     dispatch({
       type: 'UPDATE_ITEM',
-      item: newItem,
+      id: item.id,
+      prop: 'mangadex.ready',
+      value: latestChapter.number,
+    });
+    dispatch({
+      type: 'UPDATE_ITEM',
+      id: item.id,
+      prop: 'mangadex.lastChapterTimestamp',
+      value: latestChapter.timestamp,
     });
     return true;
   } else {
-    console.log(`latest chapter not found for`, item);
+    console.log(`latest chapter not found on mangadex for`, item);
     return false;
   }
 }
@@ -107,14 +112,8 @@ function updateMeta(data, item, dispatch) {
 }
 
 async function mangadexUpdateItem(item, dispatch) {
-  dispatch({
-    type: 'MARK_ITEM_LOADING',
-    id: item.id,
-    loading: true,
-  });
-
   const promise = new Promise((resolve, reject) => {
-    ipcRenderer.once(`fetch-${item.id}`, async (event, data) => {
+    ipcRenderer.once(`fetch-mangadex-${item.id}`, async (event, data) => {
       updateReadyChapters(data, item, dispatch);
       await downloadCover(data, item, dispatch);
       updateMeta(data, item, dispatch);
@@ -124,17 +123,10 @@ async function mangadexUpdateItem(item, dispatch) {
 
   ipcRenderer.send('fetch', {
     url: `https://mangadex.org/title/${item.mangadex.id}`,
-    requestId: item.id,
+    requestId: `mangadex-${item.id}`,
   });
 
   await promise;
-
-  dispatch({
-    type: 'MARK_ITEM_LOADING',
-    id: item.id,
-    loading: false,
-  });
-
   return true;
 }
 

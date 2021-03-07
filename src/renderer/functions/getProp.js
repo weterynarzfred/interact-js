@@ -13,9 +13,14 @@ function getProp(item, prop) {
     case 'ready':
       let ready = _.get(item, 'manual.ready');
       if (isNaN(ready)) ready = 0;
-      ready = Math.max(ready, _.get(item, 'mangadex.ready'));
-      if (isNaN(ready)) ready = 0;
-      return Math.max(0, ready);
+
+      let mangadexReady = Math.max(ready, _.get(item, 'mangadex.ready'));
+      if (isNaN(mangadexReady)) mangadexReady = 0;
+
+      let mangatownReady = Math.max(ready, _.get(item, 'mangatown.ready'));
+      if (isNaN(mangatownReady)) mangatownReady = 0;
+
+      return Math.max(ready, mangadexReady, mangatownReady, 0);
     case 'unread':
       let unread = Math.max(getProp(item, 'ready') - getProp(item, 'read'), 0);
       return unread;

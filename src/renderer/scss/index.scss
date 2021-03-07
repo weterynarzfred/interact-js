@@ -6,6 +6,8 @@ $bg_4: #b47c4b;
 $bg_4_bright: #dd9b61;
 $bg_5: #a83b24;
 $text: #eee;
+$gray_light: #aaa;
+$gray_dark: #555;
 $warning: #f55;
 
 @keyframes spin {
@@ -132,13 +134,24 @@ label {
     font-size: 0.5em;
     letter-spacing: 0.1em;
     margin-top: 0.2em;
-    min-width: 9em;
+    min-width: 10em;
     margin-right: 1em;
+    text-align: right;
   }
 
   input {
     border-bottom: 1px solid $bg_5;
   }
+}
+
+hr {
+  border: none;
+  border-top: 1px solid $gray_dark;
+}
+
+h3 {
+  text-align: center;
+  font-weight: 300;
 }
 
 .item-container {
@@ -151,7 +164,7 @@ label {
 }
 
 .controls {
-  border-bottom: 1px solid $bg_5;
+  border-bottom: 1px solid $gray_dark;
 
   button {
     padding: 0.5em 1.5em;
