@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-import ItemRating from './ItemRating.jsx';
+import ItemRating from './ItemRating';
 import getProp from '../functions/getProp';
 
 function handleOpenItemEditor() {

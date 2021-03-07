@@ -32,6 +32,14 @@
 
       .item-editor-input {
         margin-bottom: 0.25em;
+
+        &:not(.editable) {
+          color: #ccc;
+
+          input {
+            border-color: #555;
+          }
+        }
       }
     }
   }

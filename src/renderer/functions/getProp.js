@@ -19,6 +19,10 @@ function getProp(item, prop) {
     case 'unread':
       let unread = Math.max(getProp(item, 'ready') - getProp(item, 'read'), 0);
       return unread;
+    case 'rating':
+      let rating = _.get(item, 'manual.rating');
+      if (isNaN(rating)) rating = 0;
+      return Math.max(0, rating);
   }
 }
 

@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
-
+import classNames from 'classnames';
 
 function ItemEditorInput(props) {
   return (
-    <div className="item-editor-ipnut">
+    <div className={classNames("item-editor-input", { editable: props.editable !== false })}>
       <label>
         <div className="input-label-text">{props.label}</div>
         <input

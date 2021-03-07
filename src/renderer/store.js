@@ -14,10 +14,18 @@ function saveData(state) {
 }
 
 function initStore() {
-  const file = fs.readFileSync(`${__static}/items.json`, {
-    encoding: 'utf8',
-  });
-  const data = JSON.parse(file);
+  let data;
+  if (!fs.existsSync(`${__static}`)) {
+    fs.mkdirSync(`${__static}`);
+  }
+  if (fs.existsSync(`${__static}/items.json`)) {
+    const file = fs.readFileSync(`${__static}/items.json`, {
+      encoding: 'utf8',
+    });
+    data = JSON.parse(file);
+  } else {
+    data = { nextId: 0, items: {} };
+  }
 
   const initialState = {
     nextId: data.nextId,

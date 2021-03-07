@@ -23,18 +23,30 @@ const installExtensions = async () => {
 };
 
 async function createWindow() {
-  const window = new BrowserWindow({
-    width: 1936,
-    height: 1088,
-    y: 0,
-    x: 1910,
+  const windowSetting = {
+    show: false,
+    backgroundColor: '#222222',
+    width: 1280,
+    height: 720,
+    title: 'Interact JS',
     webPreferences: {
       contextIsolation: false,
       nodeIntegration: true,
       worldSafeExecuteJavaScript: true,
     },
-  });
+  };
+  if (isDevelopment) {
+    windowSetting.width = 1936;
+    windowSetting.height = 1088;
+    windowSetting.y = 0;
+    windowSetting.x = 1910;
+  }
+  const window = new BrowserWindow(windowSetting);
   window.removeMenu();
+
+  window.once('ready-to-show', () => {
+    window.show();
+  });
 
   if (isDevelopment) {
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`);

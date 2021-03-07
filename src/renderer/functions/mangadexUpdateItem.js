@@ -31,6 +31,10 @@ async function downloadCover(data, item, dispatch) {
         });
       });
 
+      if (!fs.existsSync(`${__static}/mangadexCovers`)) {
+        fs.mkdirSync(`${__static}/mangadexCovers`);
+      }
+
       ipcRenderer.send('downloadFile', {
         url: cover,
         dest,
@@ -65,25 +69,23 @@ function updateReadyChapters(data, item, dispatch) {
   }
 
   if (latestChapter !== undefined && latestChapter.number !== undefined) {
+    const newItem = JSON.parse(JSON.stringify(item));
+    newItem.mangadex.ready = latestChapter.number;
+    newItem.mangadex.lastChapterTimestamp = latestChapter.timestamp;
     dispatch({
       type: 'UPDATE_ITEM',
-      id: item.id,
-      prop: 'mangadex.ready',
-      value: latestChapter.number,
+      item: newItem,
     });
-    dispatch({
-      type: 'UPDATE_ITEM',
-      id: item.id,
-      prop: 'mangadex.lastChapterTimestamp',
-      value: latestChapter.timestamp,
-    });
+    return true;
   } else {
     console.log(`latest chapter not found for`, item);
+    return false;
   }
 }
 
 function updateMeta(data, item, dispatch) {
-  if (_.get(item, 'mangadex.title') === undefined) {
+  const prevTitle = _.get(item, 'mangadex.title');
+  if (prevTitle === undefined || prevTitle === '') {
     const titleMatches = [
       ...data.matchAll(
         /class="card-header[^>]*?>.*?mx-1">([^<]*?)<\/span>.*?<\/h6>/gms
@@ -132,6 +134,8 @@ async function mangadexUpdateItem(item, dispatch) {
     id: item.id,
     loading: false,
   });
+
+  return true;
 }
 
 export default mangadexUpdateItem;

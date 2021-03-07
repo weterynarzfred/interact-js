@@ -94,23 +94,6 @@
     }
   }
 
-  @keyframes spin {
-    0% {
-      stroke-width: 15;
-      stroke-dasharray: 0 41.8879 0 0;
-      stroke-dashoffset: 41.8879;
-    }
-    25% {
-      stroke-width: 5;
-      stroke-dasharray: 0 20 10 11.8879;
-    }
-    100% {
-      stroke-width: 15;
-      stroke-dasharray: 0 0 0 41.8879;
-      stroke-dashoffset: 0;
-    }
-  }
-
   .item-loader {
     position: absolute;
     top: 50%;
@@ -174,5 +157,4 @@
 
   @import 'item-rating';
   @import 'item-unread-count';
-  @import 'item-content';
 }

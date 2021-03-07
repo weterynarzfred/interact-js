@@ -2,24 +2,14 @@ import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 import mangadexUpdateItem from '../functions/mangadexUpdateItem';
-import ItemEditorInput from './ItemEditorInput.jsx';
+import ItemEditorInput from './ItemEditorInput';
+import ButtonLoader from './ButtonLoader';
 
 function handleCloseItemEditor() {
   this.dispatch({
     type: 'OPEN_EDITOR',
     open: false,
   });
-}
-
-function handleDelete() {
-  this.dispatch({
-    type: 'DELETE_ITEM',
-    id: this.itemId,
-  });
-}
-
-function handleUpdate() {
-  mangadexUpdateItem(this.items[this.itemId], this.dispatch);
 }
 
 function ItemEditor(props) {
@@ -29,6 +19,20 @@ function ItemEditor(props) {
     const newValues = JSON.parse(JSON.stringify(values));
     _.set(newValues, prop, event.target.value);
     setValues(newValues);
+  }
+
+  async function handleUpdate() {
+    await mangadexUpdateItem(this.items[this.itemId], this.dispatch);
+    setValues({});
+  }
+
+  function handleDelete() {
+    this.dispatch({
+      type: 'DELETE_ITEM',
+      id: this.itemId,
+    });
+    handleCloseItemEditor.call(this);
+    setValues({});
   }
 
   async function handleAdd(values) {
@@ -63,6 +67,8 @@ function ItemEditor(props) {
     }
   }
 
+  const currentlyChecking = props.loading.includes(props.itemId);
+
   return (
     <div className="item-editor">
       <div className="item-editor-content">
@@ -91,7 +97,10 @@ function ItemEditor(props) {
 
         {props.itemId >= 0 ? <>
           <button onClick={handleDelete.bind(props)}>delete</button>
-          <button onClick={handleUpdate.bind(props)}>check updates</button>
+          <button onClick={handleUpdate.bind(props)} class={currentlyChecking ? 'loading' : ''}>
+            check updates
+            <ButtonLoader />
+          </button>
         </> : null}
 
         <div className="item-editor-inputs">
@@ -133,12 +142,14 @@ function ItemEditor(props) {
             label="title"
             prop="mangadex.title"
             handleChange={handleChange.bind(props)}
+            editable={false}
           />
           <ItemEditorInput
             values={values}
             label="ready"
             prop="mangadex.ready"
             handleChange={handleChange.bind(props)}
+            editable={false}
           />
         </div>
 
@@ -151,6 +162,7 @@ function mapStateToProps(state) {
   return {
     opened: state.switches.itemEditorOpened,
     itemId: state.switches.itemEditorItemId,
+    loading: state.switches.loading,
     items: state.items,
     nextId: state.nextId,
   };
