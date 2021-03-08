@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import updateItem from '../functions/updateItem';
+import Filter from './Filter';
 
 function handleOpenItemEditor() {
   this.dispatch({
@@ -37,6 +38,7 @@ function Controls(props) {
       <button id="button-update-all" onClick={handleUpdate.bind(props)}>
         update all
       </button>
+      <Filter />
     </div>
   );
 }

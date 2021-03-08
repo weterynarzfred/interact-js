@@ -30,6 +30,7 @@ function initStore() {
   const initialState = {
     nextId: data.nextId,
     items: data.items,
+    filter: '',
     switches: {
       itemEditorOpened: false,
       itemEditorItemId: -1,
@@ -83,6 +84,9 @@ function initStore() {
               }
             }
           }
+          break;
+        case 'FILTER':
+          newState.filter = action.value;
           break;
         case 'SWITCH':
           newState.switches[action.name] = action.value;

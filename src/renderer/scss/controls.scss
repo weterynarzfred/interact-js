@@ -1,0 +1,18 @@
+.controls {
+  display: flex;
+  border-bottom: 1px solid $gray_dark;
+
+  button {
+    padding: 0.5em 1.5em;
+  }
+
+  .filter {
+    margin: 0.25em;
+    margin-left: auto;
+
+    input {
+      height: 100%;
+      border-bottom: 1px solid $bg_5;
+    }
+  }
+}

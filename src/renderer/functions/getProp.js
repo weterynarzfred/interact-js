@@ -4,7 +4,9 @@ function getProp(item, prop) {
   switch (prop) {
     case 'title':
       let title = _.get(item, 'manual.title');
-      if (!title) title = _.get(item, 'mangadex.title');
+      if ([undefined, ''].includes(title))
+        title = _.get(item, 'mangadex.title');
+      if (title === undefined) title = '';
       return title;
     case 'read':
       let read = _.get(item, 'manual.read');

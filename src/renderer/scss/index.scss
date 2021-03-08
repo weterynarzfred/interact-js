@@ -163,12 +163,5 @@ h3 {
   @import 'item';
 }
 
-.controls {
-  border-bottom: 1px solid $gray_dark;
-
-  button {
-    padding: 0.5em 1.5em;
-  }
-}
-
+@import 'controls';
 @import 'item-editor';
