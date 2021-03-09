@@ -53,6 +53,7 @@
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "source-map-support": "^0.5.19",
+    "string-similarity": "^4.0.4",
     "webpack": "^4.46.0"
   }
 }
