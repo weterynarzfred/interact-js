@@ -25,7 +25,7 @@ function getProp(item, prop) {
       return Math.max(ready, mangadexReady, mangatownReady, 0);
     case 'unread':
       let unread = Math.max(getProp(item, 'ready') - getProp(item, 'read'), 0);
-      return unread;
+      return Math.round(unread * 100) / 100;
     case 'rating':
       let rating = _.get(item, 'manual.rating');
       if (isNaN(rating)) rating = 0;

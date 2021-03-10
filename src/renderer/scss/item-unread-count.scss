@@ -1,14 +1,14 @@
 .item-unread-count {
   position: absolute;
   top: 50%;
-  left: 50%;
-  margin: -0.75em -1em;
-  width: 2em;
+  left: 0;
+  margin: -0.75em 0;
+  width: 100%;
   height: 2em;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2em;
+  font-size: 1.25em;
   line-height: 1.1;
   font-weight: 900;
   text-shadow: 0 0 1em #000, 0 0 0.2em #000;
@@ -27,6 +27,10 @@
     margin-left: 0.1em;
   }
 
+  .unread-count-read {
+    font-size: 2em;
+  }
+
   .unread-count-title {
     position: absolute;
     top: 50%;
@@ -41,6 +45,29 @@
     text-transform: uppercase;
     letter-spacing: 0.3em;
     text-shadow: 0 0 1em #000, 0 0 0.2em #000;
+  }
+
+  .item-increment,
+  .item-increment-all {
+    position: absolute;
+    right: 0.25em;
+    width: 2.5em;
+    font-size: 0.75em;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 1em #000, 0 0 0.2em #000;
+    pointer-events: all;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover {
+      color: $bg_4_bright;
+    }
+  }
+  .item-increment {
+    top: 0;
+  }
+  .item-increment-all {
+    top: 50%;
   }
 }
 

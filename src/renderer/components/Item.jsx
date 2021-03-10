@@ -12,6 +12,15 @@ function handleOpenItemEditor() {
   });
 }
 
+function handleIncrement(increment) {
+  this.dispatch({
+    type: 'UPDATE_ITEM',
+    id: this.item.id,
+    prop: 'manual.read',
+    value: parseFloat(getProp(this.item, 'read')) + parseFloat(increment),
+  });
+}
+
 function Item(props) {
   const hasImage = _.get(props.item, 'mangadex.cover') !== undefined;
 
@@ -19,7 +28,7 @@ function Item(props) {
   const read = getProp(props.item, 'read');
   const ready = getProp(props.item, 'ready');
   const title = getProp(props.item, 'title');
-  const unread = Math.round(getProp(props.item, 'unread') * 100) / 100;
+  const unread = getProp(props.item, 'unread');
   if (unread > 0) classes.push('item-unread');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
 
@@ -48,15 +57,25 @@ function Item(props) {
 
       <div className="item-title">{title}</div>
 
-      {unread > 0 ? <div className="item-unread-count">
-        <div className="unread-count">{unread}</div>
+      <div className="item-unread-count">
+        {unread > 0 ? <>
+          <div className="unread-count">{unread}</div>
         /
         <div className="unread-count-ready">{ready}</div>
-        <div className="unread-count-title">unread</div>
-      </div> : <div className="item-unread-count">
-        {read}
-        <div className="unread-count-title">read</div>
-      </div>}
+          <div className="unread-count-title">unread</div>
+          {unread >= 1 ? <div
+            className="item-increment"
+            onClick={handleIncrement.bind(props, 1)}
+          >+1</div> : null}
+          {unread !== 1 ? <div
+            className="item-increment-all"
+            onClick={handleIncrement.bind(props, unread)}
+          >+{unread}</div> : null}
+        </> : <>
+          <div className="unread-count-read">{read}</div>
+          <div className="unread-count-title">read</div>
+        </>}
+      </div>
 
       {
         props.loading.includes(props.item.id) ? <svg className="item-loader" viewBox="0 0 100 100">
