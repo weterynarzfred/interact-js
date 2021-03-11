@@ -39,7 +39,9 @@ function ItemContainer(props) {
   }
 
   return (
-    <div className="item-container">{itemElements.map(item => item.element)}</div>
+    <div className="item-container">
+      {itemElements.map(item => item.element)}
+    </div>
   );
 }
 

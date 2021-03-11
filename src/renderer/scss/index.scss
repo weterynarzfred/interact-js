@@ -154,6 +154,22 @@ h3 {
   font-weight: 300;
 }
 
+.loading-bar {
+  margin: 1em 3em;
+  height: 0.5em;
+  background-color: $bg_3;
+  box-shadow: 0 0 0.2em #000;
+  border-radius: 0.25em;
+  overflow: hidden;
+
+  .bar {
+    height: 100%;
+    background-color: $bg_5;
+    box-shadow: 0 0 2em #000;
+    transition: 0.3s;
+  }
+}
+
 .item-container {
   display: flex;
   flex-wrap: wrap;

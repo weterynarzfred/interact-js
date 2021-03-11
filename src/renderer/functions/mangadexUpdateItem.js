@@ -114,10 +114,10 @@ function updateMeta(data, item, dispatch) {
 async function mangadexUpdateItem(item, dispatch) {
   const promise = new Promise((resolve, reject) => {
     ipcRenderer.once(`fetch-mangadex-${item.id}`, async (event, data) => {
-      updateReadyChapters(data, item, dispatch);
+      const success = updateReadyChapters(data, item, dispatch);
       await downloadCover(data, item, dispatch);
       updateMeta(data, item, dispatch);
-      resolve();
+      resolve(success);
     });
   });
 
@@ -126,8 +126,7 @@ async function mangadexUpdateItem(item, dispatch) {
     requestId: `mangadex-${item.id}`,
   });
 
-  await promise;
-  return true;
+  return await promise;
 }
 
 export default mangadexUpdateItem;

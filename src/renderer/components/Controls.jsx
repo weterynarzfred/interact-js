@@ -19,9 +19,10 @@ async function handleUpdate() {
   const loadingIds = [];
   for (const id in this.items) loadingIds.push(id);
   this.dispatch({
-    type: 'MARK_ITEM_LOADING',
+    type: 'MARK_ITEM',
     id: loadingIds,
-    loading: true,
+    set: true,
+    prop: 'loading',
   });
 
   for (const id in this.items) {

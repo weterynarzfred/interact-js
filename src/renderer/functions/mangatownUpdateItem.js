@@ -41,8 +41,8 @@ function updateReadyChapters(data, item, dispatch) {
 async function mangatownUpdateItem(item, dispatch) {
   const promise = new Promise((resolve, reject) => {
     ipcRenderer.once(`fetch-mangatown-${item.id}`, async (event, data) => {
-      updateReadyChapters(data, item, dispatch);
-      resolve();
+      const success = updateReadyChapters(data, item, dispatch);
+      resolve(success);
     });
   });
 
@@ -51,8 +51,7 @@ async function mangatownUpdateItem(item, dispatch) {
     requestId: `mangatown-${item.id}`,
   });
 
-  await promise;
-  return true;
+  return await promise;
 }
 
 export default mangatownUpdateItem;

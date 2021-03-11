@@ -35,6 +35,9 @@ function initStore() {
       itemEditorOpened: false,
       itemEditorItemId: -1,
       loading: [],
+      loadingCount: 0,
+      failedUpdates: [],
+      failedUpdatesCount: 0,
     },
   };
 
@@ -66,21 +69,27 @@ function initStore() {
           newState.switches.itemEditorItemId =
             action.itemId === undefined ? -1 : action.itemId;
           break;
-        case 'MARK_ITEM_LOADING':
-          const loadingIds = isArray(action.id) ? action.id : [action.id];
-          if (action.loading) {
-            for (const loadingId of loadingIds) {
-              if (!newState.switches.loading.includes(parseInt(loadingId))) {
-                newState.switches.loading.push(parseInt(loadingId));
+        case 'MARK_ITEM':
+          const IDs = isArray(action.id) ? action.id : [action.id];
+          if (action.set) {
+            if (state.switches[action.prop].length === 0) {
+              newState.switches[action.prop + 'Count'] = IDs.length;
+            } else {
+              newState.switches[action.prop + 'Count'] =
+                state.switches[action.prop + 'Count'] + IDs.length;
+            }
+            for (const ID of IDs) {
+              if (!newState.switches[action.prop].includes(parseInt(ID))) {
+                newState.switches[action.prop].push(parseInt(ID));
               }
             }
           } else {
-            for (const loadingId of loadingIds) {
-              const removeIndex = newState.switches.loading.indexOf(
-                parseInt(loadingId)
+            for (const ID of IDs) {
+              const removeIndex = newState.switches[action.prop].indexOf(
+                parseInt(ID)
               );
               if (removeIndex !== -1) {
-                newState.switches.loading.splice(removeIndex, 1);
+                newState.switches[action.prop].splice(removeIndex, 1);
               }
             }
           }
