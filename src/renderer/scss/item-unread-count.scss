@@ -13,7 +13,6 @@
   font-weight: 900;
   text-shadow: 0 0 1em #000, 0 0 0.2em #000;
   z-index: 2;
-  pointer-events: none;
   opacity: 0;
   transition: 0.3s;
 
@@ -35,39 +34,55 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    margin: 3em 0 0 -5em;
+    margin: 2em 0 0 -5em;
     width: 10em;
     height: 2em;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.5rem;
+    font-size: 0.6rem;
     text-transform: uppercase;
-    letter-spacing: 0.3em;
-    text-shadow: 0 0 1em #000, 0 0 0.2em #000;
-  }
-
-  .item-increment,
-  .item-increment-all {
-    position: absolute;
-    right: 0.25em;
-    width: 2.5em;
-    font-size: 0.75em;
     letter-spacing: 0.1em;
     text-shadow: 0 0 1em #000, 0 0 0.2em #000;
-    pointer-events: all;
-    cursor: pointer;
+  }
+
+  .item-increments {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+    left: 0;
+    margin-bottom: 0.1em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
     transition: 0.3s;
 
-    &:hover {
-      color: $bg_4_bright;
+    .item-increment,
+    .item-increment-all {
+      padding: 0.3em;
+      font-size: 0.75em;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 1em #000, 0 0 0.2em #000;
+      cursor: pointer;
+      transition: 0.3s;
+
+      &:hover {
+        color: $bg_4_bright;
+      }
+    }
+    .item-increment {
+      top: 0;
+    }
+    .item-increment-all {
+      top: 50%;
     }
   }
-  .item-increment {
-    top: 0;
-  }
-  .item-increment-all {
-    top: 50%;
+
+  &:hover {
+    .item-increments {
+      opacity: 1;
+    }
   }
 }
 

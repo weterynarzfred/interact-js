@@ -60,18 +60,20 @@ function Item(props) {
 
       <div className="item-unread-count">
         {unread > 0 ? <>
-          <div className="unread-count">{unread}</div>
+          <div className="unread-count">{read}</div>
         /
         <div className="unread-count-ready">{ready}</div>
-          <div className="unread-count-title">unread</div>
-          {unread >= 1 ? <div
-            className="item-increment"
-            onClick={handleIncrement.bind(props, 1)}
-          >+1</div> : null}
-          {unread !== 1 ? <div
-            className="item-increment-all"
-            onClick={handleIncrement.bind(props, unread)}
-          >+{unread}</div> : null}
+          <div className="unread-count-title">{unread} unread</div>
+          <div className="item-increments">
+            {unread >= 1 ? <div
+              className="item-increment"
+              onClick={handleIncrement.bind(props, 1)}
+            >+1</div> : null}
+            {unread !== 1 ? <div
+              className="item-increment-all"
+              onClick={handleIncrement.bind(props, unread)}
+            >+{unread}</div> : null}
+          </div>
         </> : <>
           <div className="unread-count-read">{read}</div>
           <div className="unread-count-title">read</div>
