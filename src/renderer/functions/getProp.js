@@ -30,6 +30,22 @@ function getProp(item, prop) {
       let rating = _.get(item, 'manual.rating');
       if (isNaN(rating)) rating = 0;
       return Math.max(0, rating);
+    case 'cover':
+      const dir = `.${
+        process.env.NODE_ENV === 'production' ? '/../static' : ''
+      }`;
+      let cover = _.get(item, 'mangadex.cover');
+      if (![undefined, ''].includes(cover)) {
+        return `${dir}/mangadexCovers/${cover}`;
+      }
+
+      cover = _.get(item, 'mangatown.cover');
+      if (![undefined, ''].includes(cover)) {
+        return `${dir}/mangatownCovers/${cover}`;
+      }
+
+      if (cover === undefined) cover = '';
+      return cover;
   }
 }
 

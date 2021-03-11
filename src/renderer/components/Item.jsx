@@ -22,7 +22,8 @@ function handleIncrement(increment) {
 }
 
 function Item(props) {
-  const hasImage = _.get(props.item, 'mangadex.cover') !== undefined;
+  const cover = getProp(props.item, 'cover');
+  const hasImage = cover !== '';
 
   const classes = ['item'];
   const read = getProp(props.item, 'read');
@@ -43,9 +44,7 @@ function Item(props) {
         >
           <div
             className="item-cover-img"
-            style={hasImage ? {
-              backgroundImage: `url(./${process.env.NODE_ENV === 'production' ? '../static/' : ''}mangadexCovers/${_.get(props.item, 'mangadex.cover')})`,
-            } : null}
+            style={hasImage ? { backgroundImage: `url(${cover})` } : null}
           ></div>
         </a>
       </div>

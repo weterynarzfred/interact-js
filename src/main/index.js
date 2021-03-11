@@ -92,6 +92,7 @@ ipcMain.on('fetch', async (event, arg) => {
 ipcMain.on('downloadFile', async (event, arg) => {
   const res = await fetch(arg.url);
   const fileStream = fs.createWriteStream(arg.dest);
+  console.log(arg);
   await new Promise((resolve, reject) => {
     res.body.pipe(fileStream);
     res.body.on('error', reject);

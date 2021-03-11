@@ -1,4 +1,57 @@
 import { ipcRenderer } from 'electron';
+import fs from 'fs';
+import _ from 'lodash';
+
+async function downloadCover(data, item, dispatch) {
+  if (
+    item.mangatown.cover === undefined ||
+    !fs.existsSync(`${__static}/mangatownCovers/${item.mangatown.cover}`)
+  ) {
+    const coverMatches = [
+      ...data.matchAll(
+        /<div class="detail_info clearfix">[^<]*?<img src="([^"]*?)"/gms
+      ),
+    ];
+    let cover;
+    if (coverMatches[0] !== undefined) {
+      cover = coverMatches[0][1];
+    }
+
+    if (cover !== undefined) {
+      const extension = cover.split('.').pop().split('?')[0];
+      const dest = `${__static}/mangatownCovers/${item.mangatown.id}.${extension}`;
+
+      const promise = new Promise((resolve, reject) => {
+        ipcRenderer.once(
+          `downloadFile-mangatown-${item.id}`,
+          async (event, data) => {
+            dispatch({
+              type: 'UPDATE_ITEM',
+              id: item.id,
+              prop: 'mangatown.cover',
+              value: `${item.mangatown.id}.${extension}`,
+            });
+            resolve();
+          }
+        );
+      });
+
+      if (!fs.existsSync(`${__static}/mangatownCovers`)) {
+        fs.mkdirSync(`${__static}/mangatownCovers`);
+      }
+
+      ipcRenderer.send('downloadFile', {
+        url: cover,
+        dest,
+        requestId: `mangatown-${item.id}`,
+      });
+
+      await promise;
+    } else {
+      console.log(`cover not found for`, item);
+    }
+  }
+}
 
 function updateReadyChapters(data, item, dispatch) {
   const chapterMatches = [
@@ -42,6 +95,7 @@ async function mangatownUpdateItem(item, dispatch) {
   const promise = new Promise((resolve, reject) => {
     ipcRenderer.once(`fetch-mangatown-${item.id}`, async (event, data) => {
       const success = updateReadyChapters(data, item, dispatch);
+      await downloadCover(data, item, dispatch);
       resolve(success);
     });
   });
