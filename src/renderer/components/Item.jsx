@@ -31,6 +31,7 @@ function Item(props) {
   const unread = getProp(props.item, 'unread');
   if (unread > 0) classes.push('item-unread');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
+  if (props.failedUpdates.includes(props.item.id)) classes.push('item-warning');
 
   return (
     <div className={classes.join(' ')}>
@@ -89,4 +90,7 @@ function Item(props) {
   );
 }
 
-export default connect(state => ({ loading: state.switches.loading }))(Item);
+export default connect(state => ({
+  loading: state.switches.loading,
+  failedUpdates: state.switches.failedUpdates,
+}))(Item);

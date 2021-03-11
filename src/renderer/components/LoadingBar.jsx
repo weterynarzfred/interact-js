@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 function LoadingBar(props) {
   if (props.loading.length === 0 || props.loadingCount <= 1) return null;
 
-  const progress = props.loading.length / props.loadingCount;
+  const progress = (props.loadingCount - props.loading.length) / props.loadingCount;
   console.log(props.loading.length, props.loadingCount);
 
   return <div className="loading-bar">
