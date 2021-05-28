@@ -38,6 +38,8 @@ function initStore() {
       loadingCount: 0,
       failedUpdates: [],
       failedUpdatesCount: 0,
+      fresh: [],
+      freshCount: 0,
     },
   };
 
@@ -90,6 +92,9 @@ function initStore() {
               );
               if (removeIndex !== -1) {
                 newState.switches[action.prop].splice(removeIndex, 1);
+                console.log(newState.switches[action.prop + 'Count']);
+                newState.switches[action.prop + 'Count'] =
+                  state.switches[action.prop + 'Count'] - 1;
               }
             }
           }

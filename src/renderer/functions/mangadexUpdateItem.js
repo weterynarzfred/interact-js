@@ -81,7 +81,7 @@ function updateReadyChapters(data, item, dispatch) {
       prop: 'mangadex.lastChapterTimestamp',
       value: latestChapter.timestamp,
     });
-    return true;
+    return latestChapter.number;
   } else {
     console.log(`latest chapter not found on mangadex for`, item);
     return false;

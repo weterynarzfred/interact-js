@@ -9,6 +9,7 @@ $text: #eee;
 $gray_light: #aaa;
 $gray_dark: #555;
 $warning: #f55;
+$fresh: #3c0;
 
 @keyframes spin {
   0% {
@@ -43,7 +44,7 @@ $warning: #f55;
 body {
   background-color: $bg;
   color: $text;
-  font-family: 'Lato', sans-serif;
+  font-family: "Lato", sans-serif;
 }
 
 button {
@@ -68,7 +69,7 @@ button {
   cursor: pointer;
 
   &:before {
-    content: '';
+    content: "";
     position: absolute;
     display: block;
     background-color: $bg_5;
@@ -176,8 +177,8 @@ h3 {
   align-items: flex-start;
   padding-bottom: 3em;
 
-  @import 'item';
+  @import "item";
 }
 
-@import 'controls';
-@import 'item-editor';
+@import "controls";
+@import "item-editor";

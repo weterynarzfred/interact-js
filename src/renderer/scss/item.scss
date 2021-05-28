@@ -60,16 +60,18 @@
     }
   }
 
-  &.item-warning {
-    &:after {
-      content: '!';
-      position: absolute;
+  .item-icons {
+    position: absolute;
+    align-items: center;
+    justify-content: center;
+    top: 0.5em;
+    left: 0.5em;
+    z-index: 1;
+
+    .icon {
       display: flex;
       align-items: center;
       justify-content: center;
-      top: 0.5em;
-      left: 0.5em;
-      background-color: $warning;
       width: 1.2em;
       height: 1.2em;
       border-radius: 50%;
@@ -77,9 +79,25 @@
       font-size: 1.5em;
       font-weight: 900;
       line-height: 1;
-      text-shadow: 0 0 1em #000, 0 0 0.2em #000;
+      text-shadow: 0 0 1em #000, 0 0 0.2em #0005;
       box-shadow: 0 0 1em #000, 0 0 0.2em #000;
-      z-index: 1;
+      cursor: default;
+
+      &.icon-failedUpdates {
+        background-color: $warning;
+
+        &:before {
+          content: "!";
+        }
+      }
+
+      &.icon-fresh {
+        background-color: $fresh;
+
+        &:before {
+          content: "\2605";
+        }
+      }
     }
   }
 
@@ -155,6 +173,6 @@
     }
   }
 
-  @import 'item-rating';
-  @import 'item-unread-count';
+  @import "item-rating";
+  @import "item-unread-count";
 }

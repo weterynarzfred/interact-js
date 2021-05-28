@@ -32,10 +32,35 @@ function Item(props) {
   const unread = getProp(props.item, 'unread');
   if (unread > 0) classes.push('item-unread');
   if (props.loading.includes(props.item.id)) classes.push('item-loading');
-  if (props.failedUpdates.includes(props.item.id)) classes.push('item-warning');
+
+  const icons = [];
+  const iconTypes = [
+    'failedUpdates',
+    'fresh'
+  ];
+  for (const type of iconTypes) {
+    if (props[type].includes(props.item.id)) {
+      icons.push(<div
+        className={`icon icon-${type}`}
+        key={type}
+        onClick={() => {
+          props.dispatch({
+            type: 'MARK_ITEM',
+            id: props.item.id,
+            prop: type,
+            set: false,
+          });
+        }}
+      ></div>);
+    }
+  }
 
   return (
     <div className={classes.join(' ')}>
+
+      <div className="item-icons">
+        {icons}
+      </div>
 
       <div className="item-cover">
         <a href={getProp(props.item, 'link')} target="_blank">
@@ -91,4 +116,5 @@ function Item(props) {
 export default connect(state => ({
   loading: state.switches.loading,
   failedUpdates: state.switches.failedUpdates,
+  fresh: state.switches.fresh,
 }))(Item);

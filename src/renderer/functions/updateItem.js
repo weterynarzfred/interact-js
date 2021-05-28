@@ -1,4 +1,5 @@
 import { _ } from 'lodash';
+import getProp from '../functions/getProp';
 import mangadexUpdateItem from './mangadexUpdateItem';
 import mangatownUpdateItem from './mangatownUpdateItem';
 
@@ -10,28 +11,39 @@ async function updateItem(item, dispatch) {
     prop: 'loading',
   });
 
-  let success = false;
+  let prevReady = getProp(item, 'ready');
+
+  let latestChapterNumber = false;
   if (_.get(item, 'mangadex.id')) {
-    success = await mangadexUpdateItem(item, dispatch);
+    latestChapterNumber = await mangadexUpdateItem(item, dispatch);
   }
   if (_.get(item, 'mangatown.id')) {
-    success = success || (await mangatownUpdateItem(item, dispatch));
+    latestChapterNumber = latestChapterNumber || (await mangatownUpdateItem(item, dispatch));
   }
 
-  if (!success) {
+  if (!latestChapterNumber) {
     dispatch({
       type: 'MARK_ITEM',
       id: item.id,
-      set: true,
       prop: 'failedUpdates',
+      set: true,
+    });
+  }
+
+  if (latestChapterNumber > prevReady) {
+    dispatch({
+      type: 'MARK_ITEM',
+      id: item.id,
+      prop: 'fresh',
+      set: true,
     });
   }
 
   dispatch({
     type: 'MARK_ITEM',
     id: item.id,
-    set: false,
     prop: 'loading',
+    set: false,
   });
 }
 

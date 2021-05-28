@@ -84,7 +84,7 @@ function updateReadyChapters(data, item, dispatch) {
       prop: 'mangatown.lastChapterTimestamp',
       value: latestChapter.timestamp,
     });
-    return true;
+    return latestChapter.number;
   } else {
     console.log(`latest chapter not found on mangatown for`, item);
     return false;
