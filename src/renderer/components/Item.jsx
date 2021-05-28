@@ -38,10 +38,7 @@ function Item(props) {
     <div className={classes.join(' ')}>
 
       <div className="item-cover">
-        <a
-          href={`https://mangadex.org/title/${_.get(props.item, 'mangadex.id')}`}
-          target="_blank"
-        >
+        <a href={getProp(props.item, 'link')} target="_blank">
           <div
             className="item-cover-img"
             style={hasImage ? { backgroundImage: `url(${cover})` } : null}
