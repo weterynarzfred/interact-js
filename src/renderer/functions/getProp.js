@@ -61,13 +61,15 @@ function getProp(item, prop) {
       return cover;
 
     case 'link':
-      let max = 0;
+      let max = -1;
       let currentProvider;
       for (const providerSlug in providers) {
-        const ready = _.get(item, `${providerSlug}.ready`);
-        if (ready > max) {
-          max = ready;
-          currentProvider = providers[providerSlug];
+        if (item[providerSlug] !== undefined) {
+          const ready = _.get(item, `${providerSlug}.ready`) || 0;
+          if (ready > max) {
+            max = ready;
+            currentProvider = providers[providerSlug];
+          }
         }
       }
       if (currentProvider === undefined) return '';
