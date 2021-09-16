@@ -1,19 +1,15 @@
 import { ipcRenderer } from 'electron';
 import fs from 'fs';
 import _ from 'lodash';
+const MFA = require('mangadex-full-api');
 
-async function downloadCover(data, item, dispatch) {
+async function downloadCover(manga, item, dispatch) {
   if (
     item.mangadex.cover === undefined ||
     !fs.existsSync(`${__static}/mangadexCovers/${item.mangadex.cover}`)
   ) {
-    const coverMatches = [
-      ...data.matchAll(/title="See covers">[^<]*?<img[^>]*?src="([^"]*?)\?/gms),
-    ];
-    let cover;
-    if (coverMatches[0] !== undefined) {
-      cover = coverMatches[0][1];
-    }
+    const coverData = await manga.mainCover.resolve();
+    const cover = coverData.image256;
 
     if (cover !== undefined) {
       const extension = cover.split('.').pop();
@@ -48,62 +44,42 @@ async function downloadCover(data, item, dispatch) {
   }
 }
 
-function updateReadyChapters(data, item, dispatch) {
-  const chapterMatches = [
-    ...data.matchAll(
-      /<div class="[^"]*?chapter-row[^"]*?"[^>]*?data-chapter="([0-9.]*?)"[^>]*?data-lang="([0-9]*)"[^>]*?data-timestamp="([0-9]*)"/gms
-    ),
-  ];
+async function updateReadyChapters(manga, item, dispatch) {
   let latestChapter;
-  for (let i = 0; i < chapterMatches.length; i++) {
-    const element = chapterMatches[i];
-    const number = element[1];
-    if (number === undefined) continue;
-    const lang = parseInt(element[2]);
-    if (lang !== 1) continue;
-    latestChapter = {
-      number: parseFloat(number),
-      timestamp: parseInt(element[3]),
-    };
-    break;
-  }
+  const chapters = await manga.getFeed({
+    translatedLanguage: ['en'],
+    order: {
+      chapter: 'desc',
+    },
+    limit: 1,
+  }, false);
 
-  if (latestChapter !== undefined && latestChapter.number !== undefined) {
+  latestChapter = chapters[0].chapter;
+
+  if (latestChapter !== undefined) {
     dispatch({
       type: 'UPDATE_ITEM',
       id: item.id,
       prop: 'mangadex.ready',
-      value: latestChapter.number,
+      value: latestChapter,
     });
-    dispatch({
-      type: 'UPDATE_ITEM',
-      id: item.id,
-      prop: 'mangadex.lastChapterTimestamp',
-      value: latestChapter.timestamp,
-    });
-    return latestChapter.number;
+    return latestChapter;
   } else {
     console.log(`latest chapter not found on mangadex for`, item);
     return false;
   }
 }
 
-function updateMeta(data, item, dispatch) {
+function updateMeta(manga, item, dispatch) {
   const prevTitle = _.get(item, 'mangadex.title');
   if (prevTitle === undefined || prevTitle === '') {
-    const titleMatches = [
-      ...data.matchAll(
-        /class="card-header[^>]*?>.*?mx-1">([^<]*?)<\/span>.*?<\/h6>/gms
-      ),
-    ];
 
-    if (titleMatches[0] !== undefined) {
-      const title = titleMatches[0][1];
+    if (manga.localizedTitle.en !== undefined) {
       dispatch({
         type: 'UPDATE_ITEM',
         id: item.id,
         prop: 'mangadex.title',
-        value: title,
+        value: manga.localizedTitle.en,
       });
     } else {
       console.log(`title not found for`, item);
@@ -112,21 +88,17 @@ function updateMeta(data, item, dispatch) {
 }
 
 async function mangadexUpdateItem(item, dispatch) {
-  const promise = new Promise((resolve, reject) => {
-    ipcRenderer.once(`fetch-mangadex-${item.id}`, async (event, data) => {
-      const success = updateReadyChapters(data, item, dispatch);
-      await downloadCover(data, item, dispatch);
-      updateMeta(data, item, dispatch);
-      resolve(success);
-    });
-  });
+  try {
+    const manga = await MFA.Manga.get(item.mangadex.id, false);
 
-  ipcRenderer.send('fetch', {
-    url: `https://mangadex.org/title/${item.mangadex.id}`,
-    requestId: `mangadex-${item.id}`,
-  });
+    const success = updateReadyChapters(manga, item, dispatch);
+    await downloadCover(manga, item, dispatch);
+    updateMeta(manga, item, dispatch);
+    return success;
 
-  return await promise;
+  } catch (error) {
+    return false;
+  }
 }
 
 export default mangadexUpdateItem;

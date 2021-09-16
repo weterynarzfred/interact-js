@@ -14,9 +14,9 @@ async function updateItem(item, dispatch) {
   let prevReady = getProp(item, 'ready');
 
   let latestChapterNumber = false;
-  // if (_.get(item, 'mangadex.id')) {
-  //   latestChapterNumber = await mangadexUpdateItem(item, dispatch);
-  // }
+  if (_.get(item, 'mangadex.id')) {
+    latestChapterNumber = await mangadexUpdateItem(item, dispatch);
+  }
   if (_.get(item, 'mangatown.id')) {
     latestChapterNumber = latestChapterNumber || (await mangatownUpdateItem(item, dispatch));
   }

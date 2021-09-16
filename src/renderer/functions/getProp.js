@@ -64,6 +64,7 @@ function getProp(item, prop) {
       let max = -1;
       let currentProvider;
       for (const providerSlug in providers) {
+        if (providerSlug !== 'mangadex') continue;
         if (item[providerSlug] !== undefined) {
           const ready = _.get(item, `${providerSlug}.ready`) || 0;
           if (ready > max) {
